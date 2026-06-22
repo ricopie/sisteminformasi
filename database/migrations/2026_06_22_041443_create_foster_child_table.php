@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignUlid('family_card_id')
                 ->constrained('family_card', 'id')
                 ->cascadeOnDelete();
-            $table->string('birth_place');
+            $table->string('birth_place', 50);
             $table->date('birth_date');
             $table->char('gender', 1)->comment('M = Male, F = Female');
             $table->timestamps();
