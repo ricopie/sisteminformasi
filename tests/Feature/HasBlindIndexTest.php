@@ -120,7 +120,7 @@ class HasBlindIndexTest extends TestCase
         ]);
         $service = $this->app->make(BlindIndexService::class);
 
-        $found = $service->findFosterChildByNik('1234567890123456');
+        $found = $service->findByHash(FosterChild::class, 'nik_hash', '1234567890123456');
 
         $this->assertNotNull($found);
         $this->assertTrue($found->is($anak));
@@ -130,7 +130,7 @@ class HasBlindIndexTest extends TestCase
     {
         $service = $this->app->make(BlindIndexService::class);
 
-        $this->assertNull($service->findFosterChildByNik('1234567890123456'));
+        $this->assertNull($service->findByHash(FosterChild::class, 'nik_hash', '1234567890123456'));
     }
 
     public function test_search_family_card_by_number(): void
@@ -140,7 +140,7 @@ class HasBlindIndexTest extends TestCase
         ]);
         $service = $this->app->make(BlindIndexService::class);
 
-        $found = $service->findFamilyCardByNumber('1234567890123456');
+        $found = $service->findByHash(FamilyCard::class, 'family_card_number_hash', '1234567890123456');
 
         $this->assertNotNull($found);
         $this->assertTrue($found->is($kk));
@@ -153,7 +153,7 @@ class HasBlindIndexTest extends TestCase
         ]);
         $service = $this->app->make(BlindIndexService::class);
 
-        $found = $service->findFamilyCardByNumber('1234-5678-9012-3456');
+        $found = $service->findByHash(FamilyCard::class, 'family_card_number_hash', '1234-5678-9012-3456');
 
         $this->assertNotNull($found);
         $this->assertTrue($found->is($kk));
