@@ -19,7 +19,7 @@ class BlindIndexService
 
         return [
             'encrypted' => Crypt::encryptString($normalized),
-            'hash' => $this->hash($normalized),
+            'hash' => $this->hash($normalized, false),
         ];
     }
 
@@ -28,10 +28,12 @@ class BlindIndexService
         return Crypt::decryptString($encryptedText);
     }
 
-    public function hash(string $plainText): string
+    public function hash(string $plainText, bool $shouldNormalize = true): string
     {
+        $text = $shouldNormalize ? $this->normalize($plainText) : $plainText;
+
         return base64_encode(
-            hash_hmac('sha256', $this->normalize($plainText), config('app.blind_index_key'), true)
+            hash_hmac('sha256', $text, config('app.blind_index_key'), true)
         );
     }
 

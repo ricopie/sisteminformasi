@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FosterChild extends Model
 {
-    use HasUlids, HasBlindIndex, HasFactory;
+    use HasBlindIndex, HasFactory, HasUlids;
+
     protected $table = 'foster_child';
 
     protected array $blindIndexFields = ['nik'];
@@ -21,7 +22,7 @@ class FosterChild extends Model
         'family_card_id',
         'birth_place',
         'birth_date',
-        'gender'
+        'gender',
     ];
 
     public function familyCard()

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\FosterChild;
 use App\Models\FamilyCard;
+use App\Models\FosterChild;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

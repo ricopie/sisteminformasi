@@ -162,16 +162,16 @@ class HasBlindIndexTest extends TestCase
     public function test_store_family_card_validation_passes_with_valid_data(): void
     {
         $data = [
-            'family_card_number'  => '1234567890123456',
+            'family_card_number' => '1234567890123456',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '001',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '40111',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '001',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '40111',
         ];
 
         $request = new StoreFamilyCardRequest;
@@ -185,16 +185,16 @@ class HasBlindIndexTest extends TestCase
         FamilyCard::factory()->create(['family_card_number' => '1234567890123456']);
 
         $data = [
-            'family_card_number'  => '1234567890123456',
+            'family_card_number' => '1234567890123456',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '001',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '40111',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '001',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '40111',
         ];
 
         $request = new StoreFamilyCardRequest;
@@ -207,16 +207,16 @@ class HasBlindIndexTest extends TestCase
     public function test_store_family_card_validation_fails_if_no_kk_not_16_digits(): void
     {
         $data = [
-            'family_card_number'  => '123456789012345',
+            'family_card_number' => '123456789012345',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '001',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '40111',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '001',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '40111',
         ];
 
         $request = new StoreFamilyCardRequest;
@@ -229,16 +229,16 @@ class HasBlindIndexTest extends TestCase
     public function test_store_family_card_validation_fails_if_no_kk_contains_letters(): void
     {
         $data = [
-            'family_card_number'  => '123456789012345a',
+            'family_card_number' => '123456789012345a',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '001',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '40111',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '001',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '40111',
         ];
 
         $request = new StoreFamilyCardRequest;
@@ -251,16 +251,16 @@ class HasBlindIndexTest extends TestCase
     public function test_store_family_card_validation_fails_if_rt_more_than_3_digits(): void
     {
         $data = [
-            'family_card_number'  => '1234567890123456',
+            'family_card_number' => '1234567890123456',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '1234',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '40111',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '1234',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '40111',
         ];
 
         $request = new StoreFamilyCardRequest;
@@ -273,16 +273,16 @@ class HasBlindIndexTest extends TestCase
     public function test_store_family_card_validation_fails_if_postal_code_not_5_digits(): void
     {
         $data = [
-            'family_card_number'  => '1234567890123456',
+            'family_card_number' => '1234567890123456',
             'head_of_family_name' => 'Budi',
-            'address'             => 'Jl. Merdeka No.1',
-            'rt'                  => '001',
-            'rw'                  => '002',
-            'village'             => 'Sukamaju',
-            'sub_district'        => 'Cibeunying',
-            'city'                => 'Bandung',
-            'province'            => 'Jawa Barat',
-            'postal_code'         => '4011',
+            'address' => 'Jl. Merdeka No.1',
+            'rt' => '001',
+            'rw' => '002',
+            'village' => 'Sukamaju',
+            'sub_district' => 'Cibeunying',
+            'city' => 'Bandung',
+            'province' => 'Jawa Barat',
+            'postal_code' => '4011',
         ];
 
         $request = new StoreFamilyCardRequest;

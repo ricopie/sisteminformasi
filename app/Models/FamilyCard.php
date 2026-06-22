@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FamilyCard extends Model
 {
-    use HasUlids, HasBlindIndex, HasFactory;
+    use HasBlindIndex, HasFactory, HasUlids;
+
     protected $table = 'family_card';
 
     protected array $blindIndexFields = ['family_card_number'];

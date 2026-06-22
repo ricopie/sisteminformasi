@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\UniqueFamilyCardNumber;
+use App\Models\FamilyCard;
+use App\Rules\UniqueBlindIndex;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,17 +30,17 @@ class StoreFamilyCardRequest extends FormRequest
                 'string',
                 'size:16',
                 'regex:/^[0-9]+$/',
-                new UniqueFamilyCardNumber,
+                new UniqueBlindIndex(FamilyCard::class, 'family_card_number_hash'),
             ],
             'head_of_family_name' => ['required', 'string', 'max:150'],
-            'address'             => ['required', 'string', 'max:150'],
-            'rt'                  => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
-            'rw'                  => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
-            'village'             => ['required', 'string', 'max:150'],
-            'sub_district'        => ['required', 'string', 'max:150'],
-            'city'                => ['required', 'string', 'max:150'],
-            'province'            => ['required', 'string', 'max:150'],
-            'postal_code'         => ['required', 'string', 'size:5', 'regex:/^[0-9]+$/'],
+            'address' => ['required', 'string', 'max:150'],
+            'rt' => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
+            'rw' => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
+            'village' => ['required', 'string', 'max:150'],
+            'sub_district' => ['required', 'string', 'max:150'],
+            'city' => ['required', 'string', 'max:150'],
+            'province' => ['required', 'string', 'max:150'],
+            'postal_code' => ['required', 'string', 'size:5', 'regex:/^[0-9]+$/'],
         ];
     }
 }
