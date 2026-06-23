@@ -15,8 +15,8 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('fullname');
             $table->string('nickname', 10)->nullable();
-            $table->text('nik_encrypted');
-            $table->string('nik_hash', 255)->unique();
+            $table->text('nik');
+            $table->string('nik_hash', 255)->unique()->nullable();
             $table->foreignUlid('family_card_id')
                 ->constrained('family_card', 'id')
                 ->cascadeOnDelete();

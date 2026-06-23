@@ -41,7 +41,7 @@ class FamilyCard extends Model implements CipherSweetEncrypted
     protected $fillable = [
         'family_card_number',
         'head_of_family_name',
-        'address',
+        'street',
         'rt',
         'rw',
         'village',
@@ -70,7 +70,7 @@ class FamilyCard extends Model implements CipherSweetEncrypted
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
         $encryptedRow
-            ->addField('family_card_number_encrypted')
-            ->addBlindIndex('family_card_number_hash', new BlindIndex('family_card_number_hash'));
+            ->addField('family_card_number')
+            ->addBlindIndex('family_card_number', new BlindIndex('family_card_number_hash'));
     }
 }

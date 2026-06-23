@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('family_card', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->text('family_card_number_encrypted');
-            $table->string('family_card_number_hash', 255)->unique();
+            $table->text('family_card_number');
+            $table->string('family_card_number_hash', 255)->unique()->nullable();
             $table->string('head_of_family_name', 150);
 
-            $table->string('address', 150);
+            $table->string('street', 150);
             $table->string('rt', 3);
             $table->string('rw', 3);
             $table->string('village', 150);
