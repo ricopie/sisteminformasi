@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('semester', ['odd', 'even'])->comment('Semester of the academic year, either "odd" or "even"');
             $table->decimal('gpa', 3, 2)->comment('Grade Point Average for the semester, e.g., 3.75');
             $table->integer('class_rank')->comment('Rank of the student in their class');
-            $table->text('achivements')->nullable();
+            $table->text('achievements')->nullable();
             $table->text('caregiver_notes')->nullable()->comment('Evaluation (e.g. "Needs extra tutoring in Mathematics)');
             $table->string('report_card_path')->nullable();
             $table->timestamps();

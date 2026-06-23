@@ -17,7 +17,7 @@ class FamilyCardFactory extends Factory
         return [
             'family_card_number' => fake()->numerify('################'),
             'head_of_family_name' => fake()->name(),
-            'address' => fake()->address(),
+            'street' => fake()->streetAddress(),
             'rt' => fake()->numerify('###'),
             'rw' => fake()->numerify('###'),
             'village' => fake()->city(),
