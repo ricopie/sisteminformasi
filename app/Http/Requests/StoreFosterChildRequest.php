@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\FosterChild;
-use App\Rules\UniqueBlindIndex;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,7 +28,6 @@ class StoreFosterChildRequest extends FormRequest
                 'string',
                 'size:16',
                 'regex:/^[0-9]+$/',
-                new UniqueBlindIndex(FosterChild::class, 'nik_hash'),
             ],
             'fullname' => ['required', 'string', 'max:150'],
             'nickname' => ['required', 'string', 'max:10'],

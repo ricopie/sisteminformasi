@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
-use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
-use ParagonIE\CipherSweet\EncryptedRow;
-use ParagonIE\CipherSweet\BlindIndex;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use ParagonIE\CipherSweet\BlindIndex;
+use ParagonIE\CipherSweet\EncryptedRow;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 class FosterChild extends Model implements CipherSweetEncrypted
 {
@@ -23,10 +23,10 @@ class FosterChild extends Model implements CipherSweetEncrypted
     protected $table = 'foster_child';
 
     /**
-     * [Deprecated] 
-     * Don't use this property anymore, instead use `configureCipherSweet` method 
+     * [Deprecated]
+     * Don't use this property anymore, instead use `configureCipherSweet` method
      * to define encrypted fields and blind index.
-     * 
+     *
      * Define field should be blind indexing
      *
      * @var list<string>
@@ -61,11 +61,8 @@ class FosterChild extends Model implements CipherSweetEncrypted
      *
      * Each column that should be encrypted should be added below. Each column
      * in the migration should be a `text` type to store the encrypted value.
-     * 
-     * See https://github.com/spatie/laravel-ciphersweet#usage for details.
      *
-     * @param EncryptedRow $encryptedRow
-     * @return void
+     * See https://github.com/spatie/laravel-ciphersweet#usage for details.
      */
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
