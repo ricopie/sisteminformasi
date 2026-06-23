@@ -17,7 +17,7 @@ class AsAddress implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): Address
     {
         return new Address(
-            $attributes['address'],
+            $attributes['street'],
             $attributes['rt'],
             $attributes['rw'],
             $attributes['village'],
@@ -41,7 +41,7 @@ class AsAddress implements CastsAttributes
         }
 
         return [
-            'address' => $value->address,
+            'street' => $value->street,
             'rt' => $value->rt,
             'rw' => $value->rw,
             'village' => $value->village,

@@ -2,13 +2,13 @@
 
 namespace App\ValueObjects;
 
-class Address
+readonly class Address
 {
     /**
      * Create a new class instance.
      */
     public function __construct(
-        public string $address,
+        public string $street,
         public string $rt,
         public string $rw,
         public string $village,
