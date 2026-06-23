@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
-use App\Traits\HasBlindIndex;
+use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
+use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
+use ParagonIE\CipherSweet\EncryptedRow;
+use ParagonIE\CipherSweet\BlindIndex;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class FamilyCard extends Model
+class FamilyCard extends Model implements CipherSweetEncrypted
 {
-    use HasBlindIndex, HasFactory, HasUlids;
+    use HasFactory, HasUlids, UsesCipherSweet;
 
     /**
      * The table associated with the model.
@@ -20,6 +23,10 @@ class FamilyCard extends Model
     protected $table = 'family_card';
 
     /**
+     * [Deprecated] 
+     * Don't use this property anymore, instead use `configureCipherSweet` method 
+     * to define encrypted fields and blind index.
+     * 
      * Define field should be blind indexing
      *
      * @var list<string>
@@ -50,5 +57,23 @@ class FamilyCard extends Model
     public function familyMember(): HasMany
     {
         return $this->hasMany(FosterChild::class, 'family_card_id', 'id');
+    }
+
+    /**
+     * Encrypted Fields
+     *
+     * Each column that should be encrypted should be added below. Each column
+     * in the migration should be a `text` type to store the encrypted value.
+     * 
+     * See https://github.com/spatie/laravel-ciphersweet#usage for details.
+     *
+     * @param EncryptedRow $encryptedRow
+     * @return void
+     */
+    public static function configureCipherSweet(EncryptedRow $encryptedRow): void
+    {
+        $encryptedRow
+            ->addField('family_card_number_encrypted')
+            ->addBlindIndex('family_card_number_hash', new BlindIndex('family_card_number_hash'));
     }
 }

@@ -6,7 +6,12 @@ use App\Services\BlindIndexService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
-/**
+/** 
+ * Service for handling blind indexing of sensitive data.
+ * This service is no longer supported by development, 
+ * and is scheduled for removal instead use spatie/laravel-ciphersweet.
+ * Please check the installation method at https://github.com/spatie/laravel-ciphersweet#installation
+ * 
  * @mixin Model
  *
  * @property array $blindIndexFields
@@ -22,8 +27,8 @@ trait HasBlindIndex
     public function initializeHasBlindIndex(): void
     {
         foreach ($this->blindIndexFields as $field) {
-            $this->makeHidden($field.'_encrypted');
-            $this->makeHidden($field.'_hash');
+            $this->makeHidden($field . '_encrypted');
+            $this->makeHidden($field . '_hash');
         }
     }
 
@@ -47,8 +52,8 @@ trait HasBlindIndex
 
                 $result = $service->encrypt($plain);
 
-                $model->attributes[$field.'_encrypted'] = $result['encrypted'];
-                $model->attributes[$field.'_hash'] = $result['hash'];
+                $model->attributes[$field . '_encrypted'] = $result['encrypted'];
+                $model->attributes[$field . '_hash'] = $result['hash'];
 
                 unset($model->attributes[$field]);
             }
@@ -70,7 +75,7 @@ trait HasBlindIndex
     public function getAttribute($key)
     {
         if (in_array($key, $this->blindIndexFields)) {
-            $encryptedValue = $this->getAttributeFromArray($key.'_encrypted');
+            $encryptedValue = $this->getAttributeFromArray($key . '_encrypted');
 
             if (is_null($encryptedValue)) {
                 return null;

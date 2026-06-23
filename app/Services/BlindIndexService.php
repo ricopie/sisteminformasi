@@ -5,6 +5,12 @@ namespace App\Services;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
+/**
+ * Service for handling blind indexing of sensitive data.
+ * This service is no longer supported by development, 
+ * and is scheduled for removal instead use spatie/laravel-ciphersweet.
+ * Please check the installation method at https://github.com/spatie/laravel-ciphersweet#installation
+ */
 class BlindIndexService
 {
     /**
