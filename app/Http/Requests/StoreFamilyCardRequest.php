@@ -12,14 +12,9 @@ class StoreFamilyCardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -30,7 +25,7 @@ class StoreFamilyCardRequest extends FormRequest
                 'regex:/^[0-9]+$/',
             ],
             'head_of_family_name' => ['required', 'string', 'max:150'],
-            'address' => ['required', 'string', 'max:150'],
+            'street' => ['required', 'string', 'max:150'],
             'rt' => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
             'rw' => ['required', 'string', 'max:3', 'regex:/^[0-9]+$/'],
             'village' => ['required', 'string', 'max:150'],

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreEducationHistoryRequest extends FormRequest
+class UpdateEducationHistoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,12 +18,11 @@ class StoreEducationHistoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'foster_child_id' => ['required', 'string', 'exists:foster_child,id'],
-            'school_level' => ['required', Rule::enum(SchoolLevel::class)],
-            'school_name' => ['required', 'string', 'max:255'],
-            'admission_year' => ['required', 'integer', 'digits:4', 'min:1900', 'max:' . date('Y')],
+            'school_level' => ['sometimes', Rule::enum(SchoolLevel::class)],
+            'school_name' => ['sometimes', 'string', 'max:255'],
+            'admission_year' => ['sometimes', 'integer', 'digits:4', 'min:1900', 'max:' . date('Y')],
             'graduation_year' => ['nullable', 'integer', 'digits:4', 'min:1900', 'max:' . date('Y')],
-            'status' => ['required', Rule::enum(EducationStatus::class)],
+            'status' => ['sometimes', Rule::enum(EducationStatus::class)],
             'dropout_reason' => ['nullable', 'string', 'max:1000'],
         ];
     }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAcademicRecordRequest extends FormRequest
+class UpdateAcademicRecordRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,11 +15,10 @@ class StoreAcademicRecordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'foster_child_id' => ['required', 'string', 'exists:foster_child,id'],
-            'academic_year' => ['required', 'string', 'regex:/^\d{4}\/\d{4}$/'],
-            'semester' => ['required', 'string', 'in:odd,even'],
-            'gpa' => ['required', 'numeric', 'min:0', 'max:4'],
-            'class_rank' => ['required', 'integer', 'min:1'],
+            'academic_year' => ['sometimes', 'string', 'regex:/^\d{4}\/\d{4}$/'],
+            'semester' => ['sometimes', 'string', 'in:odd,even'],
+            'gpa' => ['sometimes', 'numeric', 'min:0', 'max:4'],
+            'class_rank' => ['sometimes', 'integer', 'min:1'],
             'achievements' => ['nullable', 'string', 'max:5000'],
             'caregiver_notes' => ['nullable', 'string', 'max:5000'],
             'report_card_path' => ['nullable', 'string', 'max:255'],

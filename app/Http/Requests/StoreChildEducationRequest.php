@@ -15,7 +15,7 @@ class StoreChildEducationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,6 +26,7 @@ class StoreChildEducationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'foster_child_id' => ['required', 'string', 'exists:foster_child,id'],
             'education_status' => ['required', Rule::enum(EducationStatus::class)],
             'school_level' => ['required', Rule::enum(SchoolLevel::class)],
             'school_name' => ['required', 'string', 'max:20'],
