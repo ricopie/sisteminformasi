@@ -3,25 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EducationFunding extends Model
 {
-    use HasUlids;
+    use HasFactory, HasUlids;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'education_fundings';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
+        'foster_child_id',
         'funding_source',
         'amount',
         'currency',
@@ -31,4 +24,19 @@ class EducationFunding extends Model
         'urgent_needs',
         'funding_status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2',
+            'funding_start_date' => 'date',
+            'funding_end_date' => 'date',
+            'monthly_tuition_fee' => 'decimal:2',
+        ];
+    }
+
+    public function fosterChild(): BelongsTo
+    {
+        return $this->belongsTo(FosterChild::class, 'foster_child_id', 'id');
+    }
 }
