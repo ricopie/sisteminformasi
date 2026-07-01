@@ -15,6 +15,7 @@
     <source>
         <include>
             <directory>app</directory>
+            <directory>modules</directory>
         </include>
     </source>
     <php>
@@ -32,7 +33,6 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
-        <env name="BLIND_INDEX_KEY" value="testing-blind-index-key-for-unit-test"/>
         <env name="CIPHERSWEET_PROVIDER" value="string"/>
         <env name="CIPHERSWEET_KEY" value="b3Rrvx-5FGOBIc-GSzlj3ZVMqZfn8_1FOI4nOQzB4Ro="/>
         <env name="CIPHERSWEET_BACKEND" value="fips"/>
