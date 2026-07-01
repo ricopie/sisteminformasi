@@ -2,21 +2,31 @@
 
 namespace App\ValueObjects;
 
-readonly class Address
+use Illuminate\Contracts\Support\Arrayable;
+
+final class Address implements Arrayable
 {
     /**
      * Create a new class instance.
      */
     public function __construct(
-        public string $street,
-        public string $rt,
-        public string $rw,
-        public string $village,
-        public string $sub_district,
-        public string $city,
-        public string $province,
-        public string $postal_code
-    ) {
-        //
+        private string $street,
+        private string $rt,
+        private string $rw,
+        private string $village,
+        private string $district,
+        private string $city,
+        private string $province,
+        private string $postal_code
+    ) {}
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
+    }
+
+    public function equals(Address $other): bool
+    {
+        return $this->toArray() === $other->toArray();
     }
 }
