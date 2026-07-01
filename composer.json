@@ -55,6 +55,7 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "test-coverage": "@php artisan test --coverage",
         "format": "vendor/bin/pint",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
