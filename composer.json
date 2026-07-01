@@ -27,6 +27,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Modules\\": "modules/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
@@ -54,7 +55,7 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
-	"format": "vendor/bin/pint",
+        "format": "vendor/bin/pint",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
