@@ -123,6 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'blind_index_key' => env('BLIND_INDEX_KEY'),
-
 ];
