@@ -2,11 +2,14 @@
 
 namespace Modules\Beneficiary\ValueObjects\Child;
 
+use App\Concern\RecursivelyConversToArray;
 use App\ValueObjects\Contact;
 use Illuminate\Contracts\Support\Arrayable;
 
 final class Guardian implements Arrayable
 {
+    use RecursivelyConversToArray;
+
     /**
      * Create a new class instance.
      */
@@ -15,12 +18,4 @@ final class Guardian implements Arrayable
         private string $relationship,
         private ?Contact $contact = null,
     ) {}
-
-    public function toArray(): array
-    {
-        return array_map(
-            fn ($value) => $value instanceof Arrayable ? $value->toArray() : $value,
-            get_object_vars($this)
-        );
-    }
 }
