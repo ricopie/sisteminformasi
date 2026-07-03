@@ -16,6 +16,20 @@ final class ChildAttributes implements Arrayable
         private Guardian $guardian,
         private Education $education,
         private array $hobbies = [],
-        private ?string $entry_date = null,
     ) {}
+
+    public function guardian(): Guardian
+    {
+        return $this->guardian;
+    }
+
+    public function education(): Education
+    {
+        return $this->education;
+    }
+
+    public function hobbies(): array
+    {
+        return $this->hobbies;
+    }
 }
