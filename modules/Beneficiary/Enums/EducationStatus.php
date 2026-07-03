@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace Modules\Beneficiary\Enums;
 
 enum EducationStatus: string
 {
