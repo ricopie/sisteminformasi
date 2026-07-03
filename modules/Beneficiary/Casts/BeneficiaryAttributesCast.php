@@ -21,7 +21,9 @@ class BeneficiaryAttributesCast implements CastsAttributes
 
         return match (BeneficiaryType::tryFrom($attributes['type'])) {
             BeneficiaryType::CHILD => ChildAttributes::fromArray($data ?? []),
-            default => null,
+            default => throw new \UnexpectedValueException(
+                'Unknown beneficiary type.'
+            ),
         };
     }
 
