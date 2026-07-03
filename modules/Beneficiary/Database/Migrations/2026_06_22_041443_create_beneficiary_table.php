@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Beneficiary\ValueObjects\BeneficiaryType;
+use Modules\Beneficiary\Enums\BeneficiaryType;
 
 return new class extends Migration
 {
@@ -22,7 +22,12 @@ return new class extends Migration
             $table->string('birth_place', 50);
             $table->date('birth_date');
             $table->char('gender', 1)->comment('M = Male, F = Female');
-            $table->json('extra_attributes')->nullable();
+
+            // Only MariaDB or MySQL is supported
+            $table->after('type', function (Blueprint $type) {
+                $type->json('attributes')->nullable();
+            });
+
             $table->foreignUlid('family_card_id')
                 ->constrained('family_card', 'id')
                 ->cascadeOnDelete();
