@@ -25,6 +25,11 @@ final class Address implements Arrayable
         return get_object_vars($this);
     }
 
+    public static function fromArray(array $data): self
+    {
+        return new self(...$data);
+    }
+
     public function equals(Address $other): bool
     {
         return $this->toArray() === $other->toArray();

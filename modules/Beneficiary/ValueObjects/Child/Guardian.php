@@ -15,7 +15,15 @@ final class Guardian implements Arrayable
      * Create a new class instance.
      */
     public function __construct(
-        private Person $person,
-        private GuardianRelationship $relationship,
+        public readonly Person $person,
+        public readonly GuardianRelationship $relationship,
     ) {}
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            person: Person::fromArray($data['person']),
+            relationship: GuardianRelationship::tryFrom($data['relationship'])
+        );
+    }
 }

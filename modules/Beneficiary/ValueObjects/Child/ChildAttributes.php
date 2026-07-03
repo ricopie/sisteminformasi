@@ -18,6 +18,15 @@ final class ChildAttributes implements Arrayable
         private array $hobbies = [],
     ) {}
 
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            guardian: Guardian::fromArray($data['guardian']),
+            education: Education::fromArray($data['education']),
+            hobbies: $data['hobbies'] ?? []
+        );
+    }
+
     public function guardian(): Guardian
     {
         return $this->guardian;

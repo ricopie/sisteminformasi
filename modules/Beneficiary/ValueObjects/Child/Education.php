@@ -14,9 +14,19 @@ final class Education implements Arrayable
      * Create a new class instance.
      */
     public function __construct(
-        private EducationLevel $level,
-        private string $school_name,
-        private int $grade,
-        private ?string $major = null,
+        public readonly EducationLevel $level,
+        public readonly string $schoolName,
+        public readonly int $grade,
+        public readonly ?string $major = null,
     ) {}
+
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            level: EducationLevel::tryFrom($data['level']),
+            schoolName: $data['schoolName'],
+            grade: $data['grade'],
+            major: $data['major'] ?? null
+        );
+    }
 }
