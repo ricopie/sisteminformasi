@@ -40,7 +40,7 @@ class MakeModuleCommand extends Command
         $this->createGitKeep($module);
         $this->createServiceProvider($module);
 
-        $this->info("Module [$module}] created successfuly.");
+        $this->info("Module [$module] created successfuly.");
         $this->line("Remember to enale it in config/modules when module it's ready.");
 
         return self::SUCCESS;
