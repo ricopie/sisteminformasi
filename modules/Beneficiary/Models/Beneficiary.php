@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Beneficiary\Casts\BeneficiaryAttributesCast;
 use Modules\Beneficiary\Enums\BeneficiaryType;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
@@ -50,7 +51,7 @@ class Beneficiary extends Model implements CipherSweetEncrypted
         return [
             'type' => BeneficiaryType::class,
             'birth_date' => 'date',
-            'attributes' => 'array',
+            'attributes' => BeneficiaryAttributesCast::class,
         ];
     }
 
