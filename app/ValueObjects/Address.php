@@ -4,7 +4,7 @@ namespace App\ValueObjects;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-final class Address implements Arrayable
+final readonly class Address implements Arrayable
 {
     /**
      * Create a new class instance.

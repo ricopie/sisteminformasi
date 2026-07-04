@@ -25,6 +25,16 @@ class AddressTest extends TestCase
     }
 
     #[Test]
+    public function it_can_create_from_array(): void
+    {
+        $data = $this->fakeAddress();
+        $address = Address::fromArray($data);
+
+        $this->assertInstanceOf(Address::class, $address);
+        $this->assertEquals($data, $address->toArray());
+    }
+
+    #[Test]
     public function it_can_validate_equality()
     {
         $data = $this->fakeAddress();

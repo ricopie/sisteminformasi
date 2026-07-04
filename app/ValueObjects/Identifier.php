@@ -2,17 +2,16 @@
 
 namespace App\ValueObjects;
 
-use InvalidArgumentException;
-
-use function sprintf;
+use App\Exceptions\InvalidIdentifierException;
 
 abstract readonly class Identifier
 {
     public function __construct(public string $value)
     {
         if (! static::isValid($value)) {
-            throw new InvalidArgumentException(
-                sprintf('The identifier "%s" is invalid.', $value)
+            throw InvalidIdentifierException::for(
+                $value,
+                static::class,
             );
         }
     }

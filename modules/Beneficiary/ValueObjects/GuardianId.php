@@ -5,7 +5,7 @@ namespace Modules\Beneficiary\ValueObjects;
 use App\ValueObjects\Identifier;
 use Illuminate\Support\Str;
 
-final readonly class BeneficiaryId extends Identifier
+final readonly class GuardianId extends Identifier
 {
     public static function generate(): static
     {

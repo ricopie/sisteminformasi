@@ -17,9 +17,13 @@ class BeneficiaryAttributesCast implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
         $data = json_decode($value, true);
 
-        return match (BeneficiaryType::tryFrom($attributes['type'])) {
+        return match (BeneficiaryType::tryFrom($attributes['type'] ?? '')) {
             BeneficiaryType::CHILD => ChildAttributes::fromArray($data ?? []),
             default => throw new \UnexpectedValueException(
                 'Unknown beneficiary type.'

@@ -9,11 +9,6 @@ use InvalidArgumentException;
 
 class AddressCast implements CastsAttributes
 {
-    /**
-     * Cast the given value.
-     *
-     * @param  array<string, mixed>  $attributes
-     */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         if ($value === null || $value === '') {
@@ -26,14 +21,9 @@ class AddressCast implements CastsAttributes
             return null;
         }
 
-        return new Address(...$data);
+        return Address::fromArray($data);
     }
 
-    /**
-     * Prepare the given value for storage.
-     *
-     * @param  array<string, mixed>  $attributes
-     */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         if ($value === null) {
@@ -41,13 +31,19 @@ class AddressCast implements CastsAttributes
         }
 
         if (\is_array($value)) {
-            $value = new Address(...$value);
+            $value = Address::fromArray($value);
         }
 
         if (! $value instanceof Address) {
             throw new InvalidArgumentException('The given value is not an Address instance or valid array.');
         }
 
-        return json_encode($value->toArray());
+        $encoded = json_encode($value->toArray());
+
+        if ($encoded === false) {
+            throw new InvalidArgumentException('Failed to serialize address.');
+        }
+
+        return $encoded;
     }
 }

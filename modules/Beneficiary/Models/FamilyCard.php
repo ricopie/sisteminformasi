@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Beneficiary\ValueObjects\FamilyCardId;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
@@ -58,11 +59,20 @@ class FamilyCard extends Model implements CipherSweetEncrypted
     {
         $encryptedRow
             ->addField('family_card_number')
-            ->addBlindIndex('family_card_number', new BlindIndex('family_card_number_hash'));
+            ->addBlindIndex('family_card_number', new BlindIndex('family_card_number_index'))
+            ->addField('head_of_family_name')
+            ->addBlindIndex('head_of_family_name', new BlindIndex('head_of_family_name_index'))
+            ->addField('address')
+            ->addBlindIndex('address', new BlindIndex('address_index'));
     }
 
     public function familyMember(): HasMany
     {
         return $this->hasMany(Beneficiary::class, 'family_card_id', 'id');
+    }
+
+    public function newUniqueId(): string
+    {
+        return FamilyCardId::generate()->value;
     }
 }

@@ -4,7 +4,7 @@ namespace App\Concern;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-trait RecursivelyConversToArray
+trait RecursivelyConvertsToArray
 {
     public function toArray(): array
     {

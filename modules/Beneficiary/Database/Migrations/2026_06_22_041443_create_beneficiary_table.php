@@ -15,23 +15,19 @@ return new class extends Migration
         Schema::create('beneficiary', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->text('nik');
-            $table->string('nik_hash', 255)->unique()->nullable();
+            $table->string('nik_index', 255)->unique()->nullable();
             $table->enum('type', array_column(BeneficiaryType::cases(), 'value'));
-            $table->string('fullname');
-            $table->string('nickname', 10)->nullable();
+            $table->string('full_name');
+            $table->string('nick_name', 10)->nullable();
             $table->string('birth_place', 50);
             $table->date('birth_date');
             $table->char('gender', 1)->comment('M = Male, F = Female');
-
-            // Only MariaDB or MySQL is supported
-            $table->after('type', function (Blueprint $type) {
-                $type->json('attributes')->nullable();
-            });
-
+            $table->text('attributes')->nullable();
             $table->foreignUlid('family_card_id')
                 ->constrained('family_card', 'id')
                 ->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

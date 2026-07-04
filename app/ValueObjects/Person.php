@@ -2,13 +2,13 @@
 
 namespace App\ValueObjects;
 
-use App\Concern\RecursivelyConversToArray;
+use App\Concern\RecursivelyConvertsToArray;
 use Illuminate\Contracts\Support\Arrayable;
 use Modules\Beneficiary\Enums\EducationLevel;
 
-final class Person implements Arrayable
+final readonly class Person implements Arrayable
 {
-    use RecursivelyConversToArray;
+    use RecursivelyConvertsToArray;
 
     /**
      * Create a new class instance.

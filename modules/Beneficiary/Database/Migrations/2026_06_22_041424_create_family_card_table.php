@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('family_card', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->text('family_card_number');
-            $table->string('family_card_number_hash', 255)->unique()->nullable();
-            $table->string('head_of_family_name', 150);
-            $table->json('address')->nullable();
+            $table->string('family_card_number_index', 255)->unique()->nullable();
+            $table->text('head_of_family_name');
+            $table->string('head_of_family_name_index', 255)->unique()->nullable();
+            $table->text('address')->nullable();
+            $table->string('address_index', 255)->unique()->nullable();
             $table->timestamps();
         });
     }

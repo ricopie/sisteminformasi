@@ -5,17 +5,15 @@ namespace Modules\Beneficiary\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Beneficiary\Casts\BeneficiaryAttributesCast;
-use Modules\Beneficiary\Enums\BeneficiaryType;
-use Modules\Beneficiary\ValueObjects\BeneficiaryId;
+use Modules\Beneficiary\Enums\GuardianRelationship;
+use Modules\Beneficiary\ValueObjects\GuardianId;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
-class Beneficiary extends Model implements CipherSweetEncrypted
+class Guardian extends Model implements CipherSweetEncrypted
 {
     use HasFactory, HasUlids, SoftDeletes, UsesCipherSweet;
 
@@ -24,24 +22,14 @@ class Beneficiary extends Model implements CipherSweetEncrypted
      *
      * @var string
      */
-    protected $table = 'beneficiary';
+    protected $table = 'guardians';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'nik',
-        'type',
-        'fullname',
-        'nickname',
-        'birth_place',
-        'birth_date',
-        'gender',
-        'attributes',
-        'family_card_id',
-    ];
+    protected $fillable = ['person', 'relationship'];
 
     /**
      * Get the attributes that should be cast.
@@ -51,9 +39,8 @@ class Beneficiary extends Model implements CipherSweetEncrypted
     protected function casts(): array
     {
         return [
-            'type' => BeneficiaryType::class,
-            'birth_date' => 'date',
-            'attributes' => BeneficiaryAttributesCast::class,
+            'person' => 'array',
+            'relationship' => GuardianRelationship::class,
         ];
     }
 
@@ -68,17 +55,12 @@ class Beneficiary extends Model implements CipherSweetEncrypted
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
         $encryptedRow
-            ->addField('nik')
-            ->addBlindIndex('nik_index', new BlindIndex('nik_index'));
-    }
-
-    public function familyCard(): BelongsTo
-    {
-        return $this->belongsTo(FamilyCard::class, 'family_card_id', 'id');
+            ->addField('person')
+            ->addBlindIndex('person_index', new BlindIndex('person_index'));
     }
 
     public function newUniqueId(): string
     {
-        return BeneficiaryId::generate()->value;
+        return GuardianId::generate()->value;
     }
 }

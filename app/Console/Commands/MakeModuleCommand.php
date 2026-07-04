@@ -48,7 +48,7 @@ class MakeModuleCommand extends Command
 
     private function moduleExists(string $module): bool
     {
-        return File::exists(base_path("modules/$module}"));
+        return File::exists(base_path("modules/$module/"));
     }
 
     private function ensureModuleConfigExists(): void

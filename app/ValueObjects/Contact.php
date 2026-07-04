@@ -4,7 +4,7 @@ namespace App\ValueObjects;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-final class Contact implements Arrayable
+final readonly class Contact implements Arrayable
 {
     /**
      * Create a new class instance.

@@ -2,34 +2,34 @@
 
 namespace Modules\Beneficiary\ValueObjects\Child;
 
-use App\Concern\RecursivelyConversToArray;
+use App\Concern\RecursivelyConvertsToArray;
 use Illuminate\Contracts\Support\Arrayable;
 
 final class ChildAttributes implements Arrayable
 {
-    use RecursivelyConversToArray;
+    use RecursivelyConvertsToArray;
 
     /**
      * Create a new class instance.
      */
     public function __construct(
-        private Guardian $guardian,
         private Education $education,
+        private array $educationHistory = [],
         private array $hobbies = [],
     ) {}
 
     public static function fromArray(array $data): self
     {
         return new self(
-            guardian: Guardian::fromArray($data['guardian']),
             education: Education::fromArray($data['education']),
+            educationHistory: $data['educationHistory'] ?? [],
             hobbies: $data['hobbies'] ?? []
         );
     }
 
-    public function guardian(): Guardian
+    public function educationHistory(): array
     {
-        return $this->guardian;
+        return $this->educationHistory;
     }
 
     public function education(): Education

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('blind_indexes', function (Blueprint $table) {
             $table->morphs('indexable');
@@ -16,5 +16,10 @@ return new class extends Migration
             $table->index(['name', 'value']);
             $table->unique(['indexable_type', 'indexable_id', 'name']);
         });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('blind_indexes');
     }
 };
