@@ -34,8 +34,8 @@ class Beneficiary extends Model implements CipherSweetEncrypted
     protected $fillable = [
         'nik',
         'type',
-        'fullname',
-        'nickname',
+        'full_name',
+        'nick_name',
         'birth_place',
         'birth_date',
         'gender',

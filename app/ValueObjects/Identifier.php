@@ -16,26 +16,19 @@ abstract readonly class Identifier
         }
     }
 
-    /**
-     * Determine whether the given identifier is valid.
-     *
-     * Implementations typically validate using
-     * Illuminate\Support\Str::isUlid() or Str::isUuid().
-     */
+    /** Determine whether the given value is a valid identifier */
     abstract protected static function isValid(string $value): bool;
 
-    /**
-     * Generate a new identifier.
-     *
-     * Implementations may use ULID or UUID depending on the concrete type.
-     */
+    /** Generate a new identifier */
     abstract public static function generate(): static;
 
+    /** Check if two identifiers are equal */
     public function equals(self $other): bool
     {
         return static::class === $other::class && $this->value === $other->value;
     }
 
+    /** Get string representation of the identifier */
     public function __toString(): string
     {
         return $this->value;
