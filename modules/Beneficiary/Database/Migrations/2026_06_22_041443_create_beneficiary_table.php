@@ -17,10 +17,11 @@ return new class extends Migration
             $table->text('nik');
             $table->string('nik_index', 255)->unique()->nullable();
             $table->enum('type', array_column(BeneficiaryType::cases(), 'value'));
-            $table->string('full_name');
-            $table->string('nick_name', 10)->nullable();
-            $table->string('birth_place', 50);
-            $table->date('birth_date');
+            $table->text('full_name');
+            $table->string('full_name_index', 255)->unique()->nullable();
+            $table->text('nick_name')->nullable();
+            $table->text('birth_place');
+            $table->text('birth_date');
             $table->char('gender', 1)->comment('M = Male, F = Female');
             $table->text('attributes')->nullable();
             $table->foreignUlid('family_card_id')

@@ -3,5 +3,6 @@
 return [
     'enabled' => [
         'Organization',
+        'Beneficiary',
     ],
 ];

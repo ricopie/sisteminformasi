@@ -6,12 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 class ModulesServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     */
     public function register(): void
     {
-        // Register Service Provider with module enabled configuration
         $enableModules = config('modules.enabled', []);
 
         foreach ($enableModules as $module) {
@@ -26,11 +22,22 @@ class ModulesServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     * Bootstrap services.
-     */
     public function boot(): void
     {
-        //
+        $enableModules = config('modules.enabled', []);
+
+        foreach ($enableModules as $module) {
+            $modulePath = base_path("modules/{$module}");
+
+            $viewPath = "{$modulePath}/Resources/views";
+            if (is_dir($viewPath)) {
+                $this->loadViewsFrom($viewPath, $module);
+            }
+
+            $routesPath = "{$modulePath}/Routes/web.php";
+            if (file_exists($routesPath)) {
+                $this->loadRoutesFrom($routesPath);
+            }
+        }
     }
 }

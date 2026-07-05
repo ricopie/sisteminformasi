@@ -1,0 +1,14 @@
+<?php
+
+namespace DummyNamespace\Http\Controllers;
+
+use App\Http\Controllers\ModuleController;
+
+class DummyClass extends ModuleController
+{
+    /** Display the module index page */
+    public function index()
+    {
+        return $this->moduleView('index');
+    }
+}

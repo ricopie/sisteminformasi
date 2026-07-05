@@ -3,6 +3,7 @@
 namespace Modules\Beneficiary\Models;
 
 use App\Casts\AddressCast;
+use App\ValueObjects\Address;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,21 +14,23 @@ use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
+/**
+ * @property string $id
+ * @property string $family_card_number
+ * @property string $head_of_family_name
+ * @property Address|array|null $address
+ */
 class FamilyCard extends Model implements CipherSweetEncrypted
 {
     use HasFactory, HasUlids, UsesCipherSweet;
 
     /**
      * The table associated with the model.
-     *
-     * @var string
      */
     protected $table = 'family_card';
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var list<string>
      */
     protected $fillable = [
         'family_card_number',
@@ -37,8 +40,6 @@ class FamilyCard extends Model implements CipherSweetEncrypted
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -71,6 +72,9 @@ class FamilyCard extends Model implements CipherSweetEncrypted
         return $this->hasMany(Beneficiary::class, 'family_card_id', 'id');
     }
 
+    /**
+     * Generate a new key for the model.
+     */
     public function newUniqueId(): string
     {
         return FamilyCardId::generate()->value;

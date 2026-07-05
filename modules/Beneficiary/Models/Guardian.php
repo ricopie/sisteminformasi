@@ -5,6 +5,7 @@ namespace Modules\Beneficiary\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Beneficiary\Enums\GuardianRelationship;
 use Modules\Beneficiary\ValueObjects\GuardianId;
@@ -13,28 +14,29 @@ use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
+/**
+ * @property string $id
+ * @property string $beneficiary_id
+ * @property array $person
+ * @property GuardianRelationship $relationship
+ * @property Beneficiary $beneficiary
+ */
 class Guardian extends Model implements CipherSweetEncrypted
 {
     use HasFactory, HasUlids, SoftDeletes, UsesCipherSweet;
 
     /**
      * The table associated with the model.
-     *
-     * @var string
      */
     protected $table = 'guardians';
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var list<string>
      */
     protected $fillable = ['person', 'relationship'];
 
     /**
      * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -59,6 +61,14 @@ class Guardian extends Model implements CipherSweetEncrypted
             ->addBlindIndex('person_index', new BlindIndex('person_index'));
     }
 
+    public function beneficiary(): BelongsTo
+    {
+        return $this->belongsTo(Beneficiary::class, 'beneficiary_id', 'id');
+    }
+
+    /**
+     * Generate a new key for the model.
+     */
     public function newUniqueId(): string
     {
         return GuardianId::generate()->value;
