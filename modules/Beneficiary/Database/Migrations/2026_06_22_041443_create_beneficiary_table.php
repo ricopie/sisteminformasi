@@ -15,10 +15,8 @@ return new class extends Migration
         Schema::create('beneficiary', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->text('nik');
-            $table->string('nik_index', 255)->unique()->nullable();
             $table->enum('type', array_column(BeneficiaryType::cases(), 'value'));
             $table->text('full_name');
-            $table->string('full_name_index', 255)->unique()->nullable();
             $table->text('nick_name')->nullable();
             $table->text('birth_place');
             $table->text('birth_date');

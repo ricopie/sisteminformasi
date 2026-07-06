@@ -10,9 +10,9 @@ class FamilyCardRepository
     public function findByNumber(string $familyCardNumber): ?FamilyCard
     {
         return FamilyCard::whereBlind(
+            'family_card_number',
             'family_card_number_index',
-            $familyCardNumber,
-            'en'
+            $familyCardNumber
         )->first();
     }
 

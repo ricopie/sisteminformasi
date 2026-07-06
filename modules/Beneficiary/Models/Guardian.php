@@ -58,7 +58,7 @@ class Guardian extends Model implements CipherSweetEncrypted
     {
         $encryptedRow
             ->addField('person')
-            ->addBlindIndex('person_index', new BlindIndex('person_index'));
+            ->addBlindIndex('person', new BlindIndex('person_index'));
     }
 
     public function beneficiary(): BelongsTo

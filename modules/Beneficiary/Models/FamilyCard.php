@@ -63,7 +63,7 @@ class FamilyCard extends Model implements CipherSweetEncrypted
             ->addBlindIndex('family_card_number', new BlindIndex('family_card_number_index'))
             ->addField('head_of_family_name')
             ->addBlindIndex('head_of_family_name', new BlindIndex('head_of_family_name_index'))
-            ->addField('address')
+            ->addOptionalTextField('address')
             ->addBlindIndex('address', new BlindIndex('address_index'));
     }
 

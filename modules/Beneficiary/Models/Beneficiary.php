@@ -80,10 +80,10 @@ class Beneficiary extends Model implements CipherSweetEncrypted
     {
         $encryptedRow
             ->addField('nik')
-            ->addBlindIndex('nik_index', new BlindIndex('nik_index'))
+            ->addBlindIndex('nik', new BlindIndex('nik_index'))
             ->addField('full_name')
-            ->addBlindIndex('full_name_index', new BlindIndex('full_name_index'))
-            ->addField('nick_name')
+            ->addBlindIndex('full_name', new BlindIndex('full_name_index'))
+            ->addOptionalTextField('nick_name')
             ->addField('birth_place')
             ->addField('birth_date');
     }

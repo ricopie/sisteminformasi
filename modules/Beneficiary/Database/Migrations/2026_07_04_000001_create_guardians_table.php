@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignUlid('beneficiary_id')->constrained('beneficiary', 'id')->cascadeOnDelete();
             // Person from VO have name, occupation, education level, address, contact
             $table->text('person');
-            $table->string('person_index', 255)->unique()->nullable();
             $table->enum('relationship', array_column(GuardianRelationship::cases(), 'value'));
             $table->timestamps();
             $table->softDeletes();
