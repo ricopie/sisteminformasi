@@ -1,6 +1,0 @@
-<?php
-
-use Illuminate\Support\Facades\Route;
-use Modules\DummyModule\Http\Controllers\DummyController;
-
-Route::resource('dummy-module', DummyController::class);

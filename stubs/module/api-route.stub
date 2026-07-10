@@ -1,8 +1,0 @@
-<?php
-
-use Illuminate\Support\Facades\Route;
-use Modules\DummyModule\Http\Controllers\DummyController;
-
-Route::prefix('api/dummy-module')->group(function () {
-    Route::get('/', [DummyController::class, 'index']);
-});

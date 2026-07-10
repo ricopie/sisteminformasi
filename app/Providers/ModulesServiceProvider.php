@@ -11,10 +11,10 @@ class ModulesServiceProvider extends ServiceProvider
         $enableModules = config('modules.enabled', []);
 
         foreach ($enableModules as $module) {
-            $providerClass = "Modules\\{$module}\\Providers\\{$module}ServiceProvider";
+            $providerClass = "Infrastructure\\Persistence\\{$module}\\Providers\\{$module}ServiceProvider";
 
             if (! class_exists($providerClass)) {
-                logger()->warning('Module service provider not found.', ['module' => $module, 'provider' => $providerClass]);
+                logger()->warning('Infrastructure provider not found.', ['context' => $module, 'provider' => $providerClass]);
 
                 continue;
             }
@@ -24,20 +24,6 @@ class ModulesServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $enableModules = config('modules.enabled', []);
-
-        foreach ($enableModules as $module) {
-            $modulePath = base_path("modules/{$module}");
-
-            $viewPath = "{$modulePath}/Resources/views";
-            if (is_dir($viewPath)) {
-                $this->loadViewsFrom($viewPath, $module);
-            }
-
-            $routesPath = "{$modulePath}/Routes/web.php";
-            if (file_exists($routesPath)) {
-                $this->loadRoutesFrom($routesPath);
-            }
-        }
+        //
     }
 }
