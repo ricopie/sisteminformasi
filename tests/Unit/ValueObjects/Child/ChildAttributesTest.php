@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\ValueObjects\Child;
 
+use Domain\Beneficiaries\ValueObjects\Child\ChildAttributes;
+use Domain\Beneficiaries\ValueObjects\Child\Education;
+use Domain\Beneficiaries\ValueObjects\Enum\EducationStatus;
 use InvalidArgumentException;
-use Modules\Beneficiary\Enums\EducationLevel;
-use Modules\Beneficiary\Enums\EducationStatus;
-use Modules\Beneficiary\ValueObjects\Child\ChildAttributes;
-use Modules\Beneficiary\ValueObjects\Child\Education;
 use PHPUnit\Framework\Attributes\Test;
+use Shared\ValueObjects\Enum\EducationLevel;
 use Tests\TestCase;
 
 class ChildAttributesTest extends TestCase

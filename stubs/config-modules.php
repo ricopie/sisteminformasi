@@ -9,7 +9,7 @@ return [
     'paths' => [
         'domain' => 'src/Domain',
         'application' => 'src/Application',
-        'infrastructure' => 'src/Infrastructure/Persistence',
+        'infrastructure' => 'src/Infrastructure',
         'presentation' => 'src/Presentation',
     ],
 
@@ -18,6 +18,6 @@ return [
         'domain' => ['Entities', 'ValueObjects', 'Repositories', 'Events', 'Exceptions'],
         'application' => ['UseCases', 'DTOs'],
         'infrastructure' => ['Models', 'Migrations', 'Providers', 'Repositories'],
-        'presentation' => ['Http/Controllers', 'Http/Requests', 'Http/Resources'],
+        'presentation' => ['Console', 'Http/Controllers', 'Http/Requests', 'Http/Resources'],
     ],
 ];

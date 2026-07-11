@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -15,14 +16,14 @@ class MakeModuleCommand extends Command
     {
         $name = str($this->argument('name'))->studly()->plural()->toString();
 
-        if (strlen($name) < 2) {
+        if (strlen((string) $name) < 2) {
             $this->error('Module name must be at least 2 characters.');
 
             return self::FAILURE;
         }
 
         if ($this->moduleExists($name) && ! $this->option('force')) {
-            $this->error("Module {$name} already exists.");
+            $this->error(sprintf('Module %s already exists.', $name));
 
             return self::FAILURE;
         }
@@ -38,13 +39,13 @@ class MakeModuleCommand extends Command
             if (in_array('infrastructure', $layers)) {
                 $this->createServiceProvider($name);
             }
-        } catch (\Exception $e) {
-            $this->error("Failed to create module: {$e->getMessage()}");
+        } catch (Exception $exception) {
+            $this->error('Failed to create module: '.$exception->getMessage());
 
             return self::FAILURE;
         }
 
-        $this->info("Module [{$name}] created successfully.");
+        $this->info(sprintf('Module [%s] created successfully.', $name));
         $this->line('Enabled it in config/modules when ready.');
 
         return self::SUCCESS;
@@ -53,7 +54,7 @@ class MakeModuleCommand extends Command
     private function moduleExists(string $name): bool
     {
         foreach (config('modules.paths') as $path) {
-            if (File::exists(base_path("{$path}/{$name}"))) {
+            if (File::exists(base_path(sprintf('%s/%s', $path, $name)))) {
                 return true;
             }
         }
@@ -72,7 +73,7 @@ class MakeModuleCommand extends Command
     {
         foreach ($layers as $layer) {
             foreach (config('modules.structure.'.$layer) as $dir) {
-                File::makeDirectory(base_path(config('modules.paths.'.$layer)."/{$name}/{$dir}"), 0755, true);
+                File::makeDirectory(base_path(config('modules.paths.'.$layer).sprintf('/%s/%s', $name, $dir)), 0755, true);
             }
         }
     }
@@ -81,7 +82,7 @@ class MakeModuleCommand extends Command
     {
         foreach ($layers as $layer) {
             foreach (config('modules.structure.'.$layer) as $dir) {
-                File::put(base_path(config('modules.paths.'.$layer)."/{$name}/{$dir}/.gitkeep"), '');
+                File::put(base_path(config('modules.paths.'.$layer).sprintf('/%s/%s/.gitkeep', $name, $dir)), '');
             }
         }
     }
@@ -93,16 +94,16 @@ class MakeModuleCommand extends Command
 
         $namespace = str_replace('/', '\\', $paths['infrastructure']);
         $namespace = preg_replace('/^src\\\\/i', '', $namespace);
-        $namespace = "{$namespace}\\{$name}\\Providers";
+        $namespace = sprintf('%s\%s\Providers', $namespace, $name);
 
         $stub = str_replace(
             ['DummyNamespace', 'DummyClass'],
-            [$namespace, "{$name}ServiceProvider"],
+            [$namespace, $name.'ServiceProvider'],
             $stubPath
         );
 
         File::put(
-            base_path("{$paths['infrastructure']}/{$name}/Providers/{$name}ServiceProvider.php"),
+            base_path(sprintf('%s/%s/Providers/%sServiceProvider.php', $paths['infrastructure'], $name, $name)),
             $stub
         );
     }

@@ -15,7 +15,7 @@
     <source>
         <include>
             <directory>app</directory>
-            <directory>modules</directory>
+            <directory>src</directory>
         </include>
     </source>
     <php>
