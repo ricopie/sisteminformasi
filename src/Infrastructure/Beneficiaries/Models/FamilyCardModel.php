@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Infrastructure\Audit\Concerns\Auditable;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Shared\Casts\AddressCast;
@@ -23,10 +24,11 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  */
 class FamilyCardModel extends Model implements CipherSweetEncrypted
 {
-    use HasFactory;
-    use HasUlids;
-    use SoftDeletes;
-    use UsesCipherSweet;
+    use Auditable,
+        HasFactory,
+        HasUlids,
+        SoftDeletes,
+        UsesCipherSweet;
 
     protected $table = 'family_card';
 

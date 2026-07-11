@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Infrastructure\Audit\Concerns\Auditable;
 use Infrastructure\Beneficiaries\Casts\BeneficiaryAttributesCast;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
@@ -34,10 +35,11 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  */
 class BeneficiaryModel extends Model implements CipherSweetEncrypted
 {
-    use HasFactory;
-    use HasUlids;
-    use SoftDeletes;
-    use UsesCipherSweet;
+    use Auditable,
+        HasFactory,
+        HasUlids,
+        SoftDeletes,
+        UsesCipherSweet;
 
     /**
      * The table associated with the model.
