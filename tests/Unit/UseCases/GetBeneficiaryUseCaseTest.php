@@ -51,7 +51,6 @@ final class GetBeneficiaryUseCaseTest extends TestCase
             '1990-01-01',
             Gender::MALE,
             new DomainId($id),
-            null,
         );
 
         $this->beneficiaries
@@ -78,7 +77,7 @@ final class GetBeneficiaryUseCaseTest extends TestCase
             ->andReturn(null);
 
         $this->expectException(EntityNotFoundException::class);
-        $this->expectExceptionMessage("Beneficiary with ID '{$id}' not found.");
+        $this->expectExceptionMessage(sprintf("Beneficiary with ID '%s' not found.", $id));
 
         $this->useCase->handle($id);
     }

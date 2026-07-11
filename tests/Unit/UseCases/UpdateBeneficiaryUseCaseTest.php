@@ -107,9 +107,7 @@ final class UpdateBeneficiaryUseCaseTest extends TestCase
         $this->beneficiaries
             ->shouldReceive('save')
             ->once()
-            ->with(Mockery::on(function (Beneficiary $b) {
-                return $b->fullName() === 'Jane Doe' && $b->nickName() === 'Jane';
-            }));
+            ->with(Mockery::on(fn (Beneficiary $b) => $b->fullName() === 'Jane Doe' && $b->nickName() === 'Jane'));
 
         $this->events
             ->shouldReceive('dispatch')

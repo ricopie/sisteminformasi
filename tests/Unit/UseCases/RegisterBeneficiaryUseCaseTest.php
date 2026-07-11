@@ -154,7 +154,6 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
         $existingCard = FamilyCard::register(
             familyCardNumber: '1234567890123456',
             headOfFamilyName: 'John Doe Sr.',
-            address: null,
         );
 
         $this->beneficiaries
@@ -272,9 +271,7 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
         $this->beneficiaries
             ->shouldReceive('save')
             ->once()
-            ->with(Mockery::on(function (Beneficiary $beneficiary) {
-                return count($beneficiary->guardians()) === 1;
-            }));
+            ->with(Mockery::on(fn (Beneficiary $beneficiary) => count($beneficiary->guardians()) === 1));
 
         $this->events
             ->shouldReceive('dispatch')
@@ -342,8 +339,6 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
                     'postal_code' => '11530',
                 ],
             ),
-            specificAttributes: null,
-            guardians: null,
         );
 
         $this->beneficiaries

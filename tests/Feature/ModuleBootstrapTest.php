@@ -15,12 +15,12 @@ class ModuleBootstrapTest extends TestCase
     {
         foreach (config('modules.enabled', []) as $module) {
             $moduleDir = Str::plural($module);
-            $provider = "Infrastructure\\{$moduleDir}\\Providers\\{$module}ServiceProvider";
+            $provider = sprintf('Infrastructure\%s\Providers\%sServiceProvider', $moduleDir, $module);
 
             if (class_exists($provider)) {
                 $this->assertTrue(
                     $this->app->providerIsLoaded($provider),
-                    "{$provider} is not loaded."
+                    $provider.' is not loaded.'
                 );
             }
         }

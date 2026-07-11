@@ -23,10 +23,10 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  */
 class GuardianModel extends Model implements CipherSweetEncrypted
 {
-    use HasFactory;
-    use HasUlids;
-    use SoftDeletes;
-    use UsesCipherSweet;
+    use HasFactory,
+        HasUlids,
+        SoftDeletes,
+        UsesCipherSweet;
 
     protected $table = 'guardians';
 

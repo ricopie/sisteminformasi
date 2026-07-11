@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
+use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
@@ -9,19 +11,23 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__.'/src',
         __DIR__.'/app',
-    ])
-    ->withSets([
-        //
-    ])
-    ->withRules([
-        //
+        __DIR__.'/tests',
     ])
     ->withCache(__DIR__.'/storage/framework/cache/rector')
+    ->withSkip([])
+    ->withRules([
+        CompactToVariablesRector::class,
+        StrlenZeroToIdenticalEmptyStringRector::class,
+    ])
     ->withPreparedSets(
         deadCode: true,
-        codeQuality: true,
+        codeQuality: false,
         codingStyle: true,
-        typeDeclarations: true,
+        typeDeclarations: false,
+        typeDeclarationDocblocks: false,
+        privatization: false,
+        naming: false,
+        instanceOf: false,
+        earlyReturn: false,
     )
-    ->withImportNames(removeUnusedImports: true, importShortClasses: true)
     ->withPhpSets(php82: true);

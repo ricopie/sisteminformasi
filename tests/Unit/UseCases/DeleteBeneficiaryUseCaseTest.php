@@ -56,7 +56,6 @@ final class DeleteBeneficiaryUseCaseTest extends TestCase
             '1990-01-01',
             Gender::MALE,
             new DomainId('01ARZ3NDEKTSV4RRFFQ69G5FAV'),
-            null,
         );
     }
 

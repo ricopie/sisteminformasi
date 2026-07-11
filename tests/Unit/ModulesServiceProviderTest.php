@@ -57,8 +57,6 @@ final class ModulesServiceProviderTest extends TestCase
 
         Log::shouldHaveReceived('warning')
             ->once()
-            ->with('Infrastructure provider not found.', Mockery::on(function (array $context): bool {
-                return ($context['context'] ?? null) === 'NonExistent';
-            }));
+            ->with('Infrastructure provider not found.', Mockery::on(fn (array $context): bool => ($context['context'] ?? null) === 'NonExistent'));
     }
 }
