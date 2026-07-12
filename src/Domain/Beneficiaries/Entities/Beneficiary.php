@@ -3,6 +3,9 @@
 namespace Domain\Beneficiaries\Entities;
 
 use DateTimeImmutable;
+use Domain\Beneficiaries\Events\BeneficiaryDeleted;
+use Domain\Beneficiaries\Events\BeneficiaryRegistered;
+use Domain\Beneficiaries\Events\BeneficiaryUpdated;
 use Domain\Beneficiaries\Exceptions\BeneficiaryAttributeException;
 use Domain\Beneficiaries\ValueObjects\Child\ChildAttributes;
 use Domain\Beneficiaries\ValueObjects\Enum\BeneficiaryType;
@@ -104,6 +107,14 @@ final class Beneficiary extends BaseEntity
         $entity->specificAttributes = $specificAttributes;
         $entity->updateTimestamp();
 
+        $entity->recordDomainEvent(new BeneficiaryRegistered(
+            beneficiaryId: $entity->id(),
+            nik: $entity->nik,
+            type: $entity->type,
+            fullName: $entity->fullName,
+            gender: $entity->gender,
+        ));
+
         return $entity;
     }
 
@@ -173,6 +184,7 @@ final class Beneficiary extends BaseEntity
     {
         $this->familyCardId = $familyCardId;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     /**
@@ -201,6 +213,7 @@ final class Beneficiary extends BaseEntity
 
         $this->guardians[] = $guardian;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
 
         return $guardian;
     }
@@ -218,6 +231,7 @@ final class Beneficiary extends BaseEntity
         );
 
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     public function nik(): NationalIdentityNumber
@@ -281,6 +295,7 @@ final class Beneficiary extends BaseEntity
         $this->fullName = $fullName;
         $this->nickName = $nickName;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     /**
@@ -291,6 +306,7 @@ final class Beneficiary extends BaseEntity
         $this->birthPlace = $birthPlace;
         $this->birthDate = $birthDate;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     /**
@@ -300,6 +316,7 @@ final class Beneficiary extends BaseEntity
     {
         $this->gender = $gender;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     /**
@@ -309,6 +326,7 @@ final class Beneficiary extends BaseEntity
     {
         $this->specificAttributes = $specificAttributes;
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
     /**
@@ -318,6 +336,14 @@ final class Beneficiary extends BaseEntity
     {
         $this->guardians = [];
         $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
+    }
+
+    public function markAsDeleted(): void
+    {
+        $this->recordDomainEvent(new BeneficiaryDeleted(
+            beneficiaryId: $this->id(),
+        ));
     }
 
     public function toArray(): array

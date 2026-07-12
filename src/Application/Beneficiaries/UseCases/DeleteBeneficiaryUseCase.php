@@ -22,7 +22,9 @@ final readonly class DeleteBeneficiaryUseCase
             throw EntityNotFoundException::forId($id, 'Beneficiary');
         }
 
+        $beneficiary->markAsDeleted();
         $this->beneficiaries->delete($beneficiary);
+
         // Dispatch domain events
         foreach ($beneficiary->pullDomainEvents() as $event) {
             $this->events->dispatch($event);

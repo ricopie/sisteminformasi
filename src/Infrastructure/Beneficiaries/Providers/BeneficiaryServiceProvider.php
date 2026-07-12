@@ -2,16 +2,23 @@
 
 namespace Infrastructure\Beneficiaries\Providers;
 
+use Application\Beneficiaries\Listeners\LogBeneficiaryDeleted;
+use Application\Beneficiaries\Listeners\LogBeneficiaryRegistered;
+use Application\Beneficiaries\Listeners\LogBeneficiaryUpdated;
 use Application\Beneficiaries\Queries\BeneficiaryQueryInterface;
 use Application\Beneficiaries\UseCases\DeleteBeneficiaryUseCase;
 use Application\Beneficiaries\UseCases\GetBeneficiaryUseCase;
 use Application\Beneficiaries\UseCases\ListBeneficiariesUseCase;
 use Application\Beneficiaries\UseCases\RegisterBeneficiaryUseCase;
 use Application\Beneficiaries\UseCases\UpdateBeneficiaryUseCase;
+use Domain\Beneficiaries\Events\BeneficiaryDeleted;
+use Domain\Beneficiaries\Events\BeneficiaryRegistered;
+use Domain\Beneficiaries\Events\BeneficiaryUpdated;
 use Domain\Beneficiaries\Repositories\BeneficiaryRepositoryInterface;
 use Domain\Beneficiaries\Repositories\FamilyCardRepositoryInterface;
 use Domain\Beneficiaries\Repositories\GuardianRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Infrastructure\Beneficiaries\Queries\EloquentBeneficiaryQuery;
@@ -66,6 +73,11 @@ final class BeneficiaryServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../Migrations');
+
+        // Register domain event listeners
+        Event::listen(BeneficiaryRegistered::class, LogBeneficiaryRegistered::class);
+        Event::listen(BeneficiaryUpdated::class, LogBeneficiaryUpdated::class);
+        Event::listen(BeneficiaryDeleted::class, LogBeneficiaryDeleted::class);
 
         Route::prefix('beneficiaries')
             ->as('beneficiaries.')
