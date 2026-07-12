@@ -140,7 +140,7 @@ Aggregate root untuk Kartu Keluarga. Independent — bisa di-share antar benefic
 final class FamilyCard extends BaseEntity
 {
     public static function register(
-        string $familyCardNumber,
+        string $number,
         PersonName $headOfFamilyName,
         ?Address $address,
     ): self;
@@ -424,7 +424,7 @@ Semua endpoint prefix `/beneficiaries`.
     "birthDate": "2010-06-15",
     "gender": "male",
     "familyCard": {
-        "family_card_number": "320101010101",
+        "number": "320101010101",
         "head_of_family_name": "Bambang",
         "address": {
             "street": "Jl. Merdeka No. 1",
@@ -518,7 +518,7 @@ FamilyCard (1) ---< Beneficiary (1) ---< Guardian
 
 FamilyCard:
   - id (ULID, PK)
-  - family_card_number (unique)
+  - number (unique)
   - head_of_family_name
   - address (json)
 

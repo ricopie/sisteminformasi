@@ -66,7 +66,7 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
             birthDate: '2010-01-01',
             gender: Gender::MALE,
             familyCard: new FamilyCardData(
-                family_card_number: '1234567890123456',
+                number: '1234567890123456',
                 head_of_family_name: 'John Doe Sr.',
                 address: [
                     'street' => 'Jl. Merdeka',
@@ -152,7 +152,7 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
     {
         $data = $this->makeRegisterData();
         $existingCard = FamilyCard::register(
-            familyCardNumber: '1234567890123456',
+            number: '1234567890123456',
             headOfFamilyName: 'John Doe Sr.',
         );
 
@@ -326,7 +326,7 @@ final class RegisterBeneficiaryUseCaseTest extends TestCase
             birthDate: '1995-05-15',
             gender: Gender::FEMALE,
             familyCard: new FamilyCardData(
-                family_card_number: '1234567890123456',
+                number: '1234567890123456',
                 head_of_family_name: 'John Doe Sr.',
                 address: [
                     'street' => 'Jl. Merdeka',

@@ -18,7 +18,7 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
 /**
  * @property string $id
- * @property string $family_card_number
+ * @property string $number
  * @property string $head_of_family_name
  * @property Address|array|null $address
  */
@@ -33,7 +33,7 @@ class FamilyCardModel extends Model implements CipherSweetEncrypted
     protected $table = 'family_card';
 
     protected $fillable = [
-        'family_card_number',
+        'number',
         'head_of_family_name',
         'address',
     ];
@@ -48,8 +48,8 @@ class FamilyCardModel extends Model implements CipherSweetEncrypted
     public static function configureCipherSweet(EncryptedRow $encryptedRow): void
     {
         $encryptedRow
-            ->addField('family_card_number')
-            ->addBlindIndex('family_card_number', new BlindIndex('family_card_number_index'))
+            ->addField('number')
+            ->addBlindIndex('number', new BlindIndex('number_index'))
             ->addField('head_of_family_name')
             ->addBlindIndex('head_of_family_name', new BlindIndex('head_of_family_name_index'))
             ->addOptionalTextField('address')

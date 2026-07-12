@@ -221,7 +221,7 @@ final class UpdateBeneficiaryUseCaseTest extends TestCase
 
         $data = new UpdateBeneficiaryData(
             familyCard: new FamilyCardData(
-                family_card_number: '9876543210987654',
+                number: '9876543210987654',
                 head_of_family_name: 'Jane Doe Sr.',
                 address: [
                     'street' => 'Jl. Sudirman',

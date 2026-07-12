@@ -31,11 +31,11 @@ final readonly class RegisterBeneficiaryUseCase
         }
 
         // Find or create FamilyCard
-        $familyCard = $this->familyCards->findByNumber($data->familyCard->family_card_number);
+        $familyCard = $this->familyCards->findByNumber($data->familyCard->number);
 
         if (! $familyCard instanceof FamilyCard) {
             $familyCard = FamilyCard::register(
-                familyCardNumber: $data->familyCard->family_card_number,
+                number: $data->familyCard->number,
                 headOfFamilyName: $data->familyCard->head_of_family_name,
                 address: empty($data->familyCard->address)
                     ? null

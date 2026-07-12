@@ -10,7 +10,7 @@ interface FamilyCardRepositoryInterface
 {
     public function findById(string $id): ?FamilyCard;
 
-    public function findByNumber(string $familyCardNumber): ?FamilyCard;
+    public function findByNumber(string $number): ?FamilyCard;
 
     public function save(FamilyCard $familyCard): void;
 

@@ -18,7 +18,7 @@ class UpdateBeneficiaryDataTest extends TestCase
     public function it_can_create_via_constructor_with_all_fields(): void
     {
         $familyCardData = [
-            'family_card_number' => '1234567890',
+            'number' => '1234567890',
             'head_of_family_name' => 'John Doe',
             'address' => [
                 'street' => '123 Main St',
@@ -41,7 +41,7 @@ class UpdateBeneficiaryDataTest extends TestCase
         ];
 
         $nik = new NationalIdentityNumber('1234567890123456');
-        $familyCard = new FamilyCardDataDto($familyCardData['family_card_number'], $familyCardData['head_of_family_name'], $familyCardData['address']);
+        $familyCard = new FamilyCardDataDto($familyCardData['number'], $familyCardData['head_of_family_name'], $familyCardData['address']);
         $guardian = new GuardianDataDto($guardianData['person'], GuardianRelationship::FATHER);
 
         $beneficiary = new UpdateBeneficiaryData(
@@ -66,7 +66,7 @@ class UpdateBeneficiaryDataTest extends TestCase
         $this->assertSame('2010-01-01', $beneficiary->birthDate);
         $this->assertSame(Gender::MALE->value, $beneficiary->gender->value);
         $this->assertInstanceOf(FamilyCardDataDto::class, $beneficiary->familyCard);
-        $this->assertSame('1234567890', $beneficiary->familyCard->family_card_number);
+        $this->assertSame('1234567890', $beneficiary->familyCard->number);
         $this->assertSame(['education' => ['school' => 'SDN 1'], 'hobbies' => ['reading']], $beneficiary->specificAttributes);
         $this->assertCount(1, $beneficiary->guardians);
         $this->assertInstanceOf(GuardianDataDto::class, $beneficiary->guardians[0]);
@@ -117,7 +117,7 @@ class UpdateBeneficiaryDataTest extends TestCase
     public function it_to_array_returns_correct_structure(): void
     {
         $familyCardData = [
-            'family_card_number' => '1234567890',
+            'number' => '1234567890',
             'head_of_family_name' => 'John Doe',
             'address' => [
                 'street' => '123 Main St',
@@ -140,7 +140,7 @@ class UpdateBeneficiaryDataTest extends TestCase
         ];
 
         $nik = new NationalIdentityNumber('1234567890123456');
-        $familyCard = new FamilyCardDataDto($familyCardData['family_card_number'], $familyCardData['head_of_family_name'], $familyCardData['address']);
+        $familyCard = new FamilyCardDataDto($familyCardData['number'], $familyCardData['head_of_family_name'], $familyCardData['address']);
         $guardian = new GuardianDataDto($guardianData['person'], GuardianRelationship::FATHER);
 
         $beneficiary = new UpdateBeneficiaryData(
@@ -167,7 +167,7 @@ class UpdateBeneficiaryDataTest extends TestCase
         $this->assertSame('2010-01-01', $arrayData['birthDate']);
         $this->assertSame('male', $arrayData['gender']);
         $this->assertIsArray($arrayData['familyCard']);
-        $this->assertSame('1234567890', $arrayData['familyCard']['family_card_number']);
+        $this->assertSame('1234567890', $arrayData['familyCard']['number']);
         $this->assertSame('John Doe', $arrayData['familyCard']['head_of_family_name']);
         $this->assertSame(['education' => ['school' => 'SDN 1'], 'hobbies' => ['reading']], $arrayData['specificAttributes']);
         $this->assertCount(1, $arrayData['guardians']);

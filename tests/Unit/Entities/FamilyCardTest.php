@@ -19,7 +19,7 @@ final class FamilyCardTest extends TestCase
     {
         $familyCard = FamilyCard::register('12345', 'John Doe');
 
-        $this->assertSame('12345', $familyCard->familyCardNumber());
+        $this->assertSame('12345', $familyCard->number());
         $this->assertSame('John Doe', $familyCard->headOfFamilyName());
         $this->assertNull($familyCard->address());
         $this->assertInstanceOf(DomainId::class, $familyCard->id());
@@ -36,7 +36,7 @@ final class FamilyCardTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_on_empty_family_card_number(): void
+    public function it_throws_on_empty_number(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Family card number must not be empty.');
@@ -58,7 +58,7 @@ final class FamilyCardTest extends TestCase
     {
         $familyCard = FamilyCard::register(' 12345 ', ' John Doe ');
 
-        $this->assertSame('12345', $familyCard->familyCardNumber());
+        $this->assertSame('12345', $familyCard->number());
         $this->assertSame('John Doe', $familyCard->headOfFamilyName());
     }
 
@@ -75,7 +75,7 @@ final class FamilyCardTest extends TestCase
         $this->assertSame($domainId, $familyCard->id());
         $this->assertSame($createdAt, $familyCard->createdAt());
         $this->assertSame($updatedAt, $familyCard->updatedAt());
-        $this->assertSame('12345', $familyCard->familyCardNumber());
+        $this->assertSame('12345', $familyCard->number());
         $this->assertSame('John Doe', $familyCard->headOfFamilyName());
         $this->assertSame($address, $familyCard->address());
     }
@@ -92,7 +92,7 @@ final class FamilyCardTest extends TestCase
         $this->assertSame($domainId, $familyCard->id());
         $this->assertSame($createdAt, $familyCard->createdAt());
         $this->assertSame($updatedAt, $familyCard->updatedAt());
-        $this->assertSame('12345', $familyCard->familyCardNumber());
+        $this->assertSame('12345', $familyCard->number());
         $this->assertSame('John Doe', $familyCard->headOfFamilyName());
         $this->assertNull($familyCard->address());
     }
@@ -144,12 +144,12 @@ final class FamilyCardTest extends TestCase
         $array = $familyCard->toArray();
 
         $this->assertArrayHasKey('id', $array);
-        $this->assertArrayHasKey('family_card_number', $array);
+        $this->assertArrayHasKey('number', $array);
         $this->assertArrayHasKey('head_of_family_name', $array);
         $this->assertArrayHasKey('address', $array);
 
         $this->assertSame($familyCard->id()->value, $array['id']);
-        $this->assertSame($familyCard->familyCardNumber(), $array['family_card_number']);
+        $this->assertSame($familyCard->number(), $array['number']);
         $this->assertSame($familyCard->headOfFamilyName(), $array['head_of_family_name']);
         $this->assertSame($familyCard->address()->toArray(), $array['address']);
     }
@@ -162,12 +162,12 @@ final class FamilyCardTest extends TestCase
         $array = $familyCard->toArray();
 
         $this->assertArrayHasKey('id', $array);
-        $this->assertArrayHasKey('family_card_number', $array);
+        $this->assertArrayHasKey('number', $array);
         $this->assertArrayHasKey('head_of_family_name', $array);
         $this->assertArrayHasKey('address', $array);
 
         $this->assertSame($familyCard->id()->value, $array['id']);
-        $this->assertSame($familyCard->familyCardNumber(), $array['family_card_number']);
+        $this->assertSame($familyCard->number(), $array['number']);
         $this->assertSame($familyCard->headOfFamilyName(), $array['head_of_family_name']);
         $this->assertNull($array['address']);
     }

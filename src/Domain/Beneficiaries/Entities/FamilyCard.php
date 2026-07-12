@@ -17,7 +17,7 @@ use Shared\ValueObjects\DomainId;
  */
 final class FamilyCard extends BaseEntity
 {
-    private string $familyCardNumber;
+    private string $number;
 
     private string $headOfFamilyName;
 
@@ -41,19 +41,19 @@ final class FamilyCard extends BaseEntity
     /**
      * Register a new FamilyCard.
      *
-     * @param  string  $familyCardNumber  Family Card Number aka. KK ID
+     * @param  string  $number  Family Card Number aka. KK ID
      * @param  string  $headOfFamilyName  Name of head of family
      * @param  Address|null  $address  Family Address
      */
     public static function register(
-        string $familyCardNumber,
+        string $number,
         string $headOfFamilyName,
         ?Address $address = null,
     ): self {
-        $familyCardNumber = trim($familyCardNumber);
+        $number = trim($number);
         $headOfFamilyName = trim($headOfFamilyName);
 
-        if ($familyCardNumber === '') {
+        if ($number === '') {
             throw new InvalidArgumentException('Family card number must not be empty.');
         }
 
@@ -62,7 +62,7 @@ final class FamilyCard extends BaseEntity
         }
 
         $entity = new self;
-        $entity->familyCardNumber = $familyCardNumber;
+        $entity->number = $number;
         $entity->headOfFamilyName = $headOfFamilyName;
         $entity->address = $address;
 
@@ -76,21 +76,21 @@ final class FamilyCard extends BaseEntity
         DomainId $id,
         DateTimeImmutable $createdAt,
         ?DateTimeImmutable $updatedAt,
-        string $familyCardNumber,
+        string $number,
         string $headOfFamilyName,
         ?Address $address = null,
     ): self {
         $entity = self::fromPersistence($id, $createdAt, $updatedAt);
-        $entity->familyCardNumber = $familyCardNumber;
+        $entity->number = $number;
         $entity->headOfFamilyName = $headOfFamilyName;
         $entity->address = $address;
 
         return $entity;
     }
 
-    public function familyCardNumber(): string
+    public function number(): string
     {
-        return $this->familyCardNumber;
+        return $this->number;
     }
 
     public function headOfFamilyName(): string
@@ -131,7 +131,7 @@ final class FamilyCard extends BaseEntity
     {
         return [
             'id' => $this->id()->value,
-            'family_card_number' => $this->familyCardNumber,
+            'number' => $this->number,
             'head_of_family_name' => $this->headOfFamilyName,
             'address' => $this->address?->toArray(),
         ];

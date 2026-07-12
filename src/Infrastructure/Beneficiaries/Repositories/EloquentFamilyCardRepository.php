@@ -18,9 +18,9 @@ final class EloquentFamilyCardRepository implements FamilyCardRepositoryInterfac
         return $model !== null ? $this->toDomain($model) : null;
     }
 
-    public function findByNumber(string $familyCardNumber): ?FamilyCard
+    public function findByNumber(string $number): ?FamilyCard
     {
-        $model = FamilyCardModel::where('family_card_number', $familyCardNumber)->first();
+        $model = FamilyCardModel::where('number', $number)->first();
 
         return $model !== null ? $this->toDomain($model) : null;
     }
@@ -34,7 +34,7 @@ final class EloquentFamilyCardRepository implements FamilyCardRepositoryInterfac
             $model->id = $familyCard->id()->value;
         }
 
-        $model->family_card_number = $familyCard->familyCardNumber();
+        $model->number = $familyCard->number();
         $model->head_of_family_name = $familyCard->headOfFamilyName();
         $model->address = $familyCard->address()?->toArray();
         $model->save();
@@ -53,7 +53,7 @@ final class EloquentFamilyCardRepository implements FamilyCardRepositoryInterfac
             updatedAt: $model->getAttribute('updated_at') !== null
                 ? new DateTimeImmutable((string) $model->getAttribute('updated_at'))
                 : null,
-            familyCardNumber: $model->getAttribute('family_card_number'),
+            number: $model->getAttribute('number'),
             headOfFamilyName: $model->getAttribute('head_of_family_name'),
             address: $model->getAttribute('address') instanceof Address
                 ? $model->getAttribute('address')
