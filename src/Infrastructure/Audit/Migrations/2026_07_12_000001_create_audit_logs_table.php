@@ -20,7 +20,6 @@ return new class extends Migration
             $table->json('new_values')->nullable();
             $table->timestamps();
 
-            $table->index(['auditable_type', 'auditable_id']);
             $table->index('event');
         });
     }
