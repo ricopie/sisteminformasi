@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Beneficiaries\Models;
 
+use Database\Factories\FamilyCardModelFactory;
 use Domain\Beneficiaries\Entities\FamilyCard;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,12 +25,11 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  */
 class FamilyCardModel extends Model implements CipherSweetEncrypted
 {
-    use Auditable,
-        HasFactory,
-        HasUlids,
-        SoftDeletes,
-        UsesCipherSweet;
-
+    use Auditable;
+    use HasFactory;
+    use HasUlids;
+    use SoftDeletes;
+    use UsesCipherSweet;
     protected $table = 'family_card';
 
     protected $fillable = [
@@ -54,6 +54,11 @@ class FamilyCardModel extends Model implements CipherSweetEncrypted
             ->addBlindIndex('head_of_family_name', new BlindIndex('head_of_family_name_index'))
             ->addOptionalTextField('address')
             ->addBlindIndex('address', new BlindIndex('address_index'));
+    }
+
+    protected static function newFactory(): FamilyCardModelFactory
+    {
+        return FamilyCardModelFactory::new();
     }
 
     public function familyMember(): HasMany

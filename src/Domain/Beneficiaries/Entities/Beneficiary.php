@@ -41,6 +41,8 @@ final class Beneficiary extends BaseEntity
 
     private DomainId $familyCardId;
 
+    private bool $isActive = true;
+
     private ?SpecificAttributes $specificAttributes = null;
 
     /** @var Guardian[] */
@@ -151,6 +153,7 @@ final class Beneficiary extends BaseEntity
         string $birthDate,
         Gender $gender,
         DomainId $familyCardId,
+        bool $isActive = true,
         ?SpecificAttributes $specificAttributes = null,
         Guardian ...$guardians,
     ): self {
@@ -163,6 +166,7 @@ final class Beneficiary extends BaseEntity
         $entity->birthDate = $birthDate;
         $entity->gender = $gender;
         $entity->familyCardId = $familyCardId;
+        $entity->isActive = $isActive;
         $entity->specificAttributes = $specificAttributes;
         $entity->guardians = $guardians;
 
@@ -274,6 +278,18 @@ final class Beneficiary extends BaseEntity
         return $this->familyCardId;
     }
 
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function changeActiveStatus(bool $isActive): void
+    {
+        $this->isActive = $isActive;
+        $this->updateTimestamp();
+        $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
+    }
+
     public function specificAttributes(): ?SpecificAttributes
     {
         return $this->specificAttributes;
@@ -358,6 +374,7 @@ final class Beneficiary extends BaseEntity
             'birth_date' => $this->birthDate,
             'gender' => $this->gender->value,
             'family_card_id' => $this->familyCardId->value,
+            'is_active' => $this->isActive,
             'specific_attributes' => $this->specificAttributes?->toArray(),
             'guardians' => array_map(
                 fn (Guardian $guardian): array => $guardian->toArray(),

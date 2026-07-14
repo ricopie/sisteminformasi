@@ -56,10 +56,11 @@ final class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterf
             $model->birth_date = $beneficiary->birthDate();
             $model->gender = $beneficiary->gender()->value;
             $model->family_card_id = $beneficiary->familyCardId()->value;
+            $model->is_active = $beneficiary->isActive();
             $model->specific_attributes = $beneficiary->specificAttributes();
             $model->save();
 
-            GuardianModel::where('beneficiary_id', $beneficiary->id()->value)->delete();
+            GuardianModel::where('beneficiary_id', $beneficiary->id()->value)->forceDelete();
 
             foreach ($beneficiary->guardians() as $guardian) {
                 $guardianModel = new GuardianModel;
@@ -91,7 +92,9 @@ final class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterf
                     : null,
                 beneficiaryId: new DomainId($g->getAttribute('beneficiary_id')),
                 person: Person::fromArray($g->getAttribute('person')),
-                relationship: GuardianRelationship::from($g->getAttribute('relationship')),
+                relationship: $g->getAttribute('relationship') instanceof GuardianRelationship
+                    ? $g->getAttribute('relationship')
+                    : GuardianRelationship::from($g->getAttribute('relationship')),
             ),
             $model->getRelation('guardians')->all(),
         );
@@ -103,15 +106,20 @@ final class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterf
                 ? new DateTimeImmutable((string) $model->getAttribute('updated_at'))
                 : null,
             nik: new NationalIdentityNumber($model->getAttribute('nik')),
-            type: BeneficiaryType::from($model->getAttribute('type')),
+            type: $model->getAttribute('type') instanceof BeneficiaryType
+                ? $model->getAttribute('type')
+                : BeneficiaryType::from($model->getAttribute('type')),
             fullName: $model->getAttribute('full_name'),
             nickName: $model->getAttribute('nick_name'),
             birthPlace: $model->getAttribute('birth_place'),
             birthDate: $model->getAttribute('birth_date') instanceof CarbonImmutable
                 ? $model->getAttribute('birth_date')->toDateString()
                 : (string) $model->getAttribute('birth_date'),
-            gender: Gender::from($model->getAttribute('gender')),
+            gender: $model->getAttribute('gender') instanceof Gender
+                ? $model->getAttribute('gender')
+                : Gender::from($model->getAttribute('gender')),
             familyCardId: new DomainId($model->getAttribute('family_card_id')),
+            isActive: (bool) $model->getAttribute('is_active'),
             specificAttributes: $model->getAttribute('specific_attributes'),
         );
 

@@ -3,6 +3,7 @@
 namespace Infrastructure\Beneficiaries\Models;
 
 use Carbon\CarbonImmutable;
+use Database\Factories\BeneficiaryModelFactory;
 use Domain\Beneficiaries\Entities\Beneficiary;
 use Domain\Beneficiaries\ValueObjects\Enum\BeneficiaryType;
 use Domain\Beneficiaries\ValueObjects\SpecificAttributes;
@@ -29,18 +30,18 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  * @property string $birth_place
  * @property CarbonImmutable|string $birth_date
  * @property string $gender
+ * @property bool $is_active
  * @property SpecificAttributes|null $specific_attributes
  * @property string $family_card_id
  * @property Collection|GuardianModel[] $guardians
  */
 class BeneficiaryModel extends Model implements CipherSweetEncrypted
 {
-    use Auditable,
-        HasFactory,
-        HasUlids,
-        SoftDeletes,
-        UsesCipherSweet;
-
+    use Auditable;
+    use HasFactory;
+    use HasUlids;
+    use SoftDeletes;
+    use UsesCipherSweet;
     /**
      * The table associated with the model.
      */
@@ -68,8 +69,8 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
     {
         return [
             'type' => BeneficiaryType::class,
-            'birth_date' => 'date',
             'specific_attributes' => BeneficiaryAttributesCast::class,
+            'is_active' => 'boolean',
         ];
     }
 
@@ -93,6 +94,11 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             ->addField('birth_date')
             ->addOptionalTextField('specific_attributes')
             ->addBlindIndex('specific_attributes', new BlindIndex('specific_attributes_index'));
+    }
+
+    protected static function newFactory(): BeneficiaryModelFactory
+    {
+        return BeneficiaryModelFactory::new();
     }
 
     public function familyCard(): BelongsTo
