@@ -30,24 +30,22 @@ final class RolePermissionSeeder extends Seeder
         }
 
         // Create roles and assign permissions
-        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
-        $admin->syncPermissions($permissions);
+        $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $superadmin->syncPermissions($permissions);
 
-        $operator = Role::firstOrCreate(['name' => 'Operator', 'guard_name' => 'web']);
-        $operator->syncPermissions(['beneficiaries.create', 'beneficiaries.read', 'beneficiaries.update']);
+        $operator = Role::firstOrCreate(['name' => 'operator', 'guard_name' => 'web']);
+        $operator->syncPermissions([
+            'beneficiaries.create',
+            'beneficiaries.read',
+            'beneficiaries.update',
+        ]);
 
-        $viewer = Role::firstOrCreate(['name' => 'Viewer', 'guard_name' => 'web']);
-        $viewer->syncPermissions(['beneficiaries.read']);
+        $user = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+        $user->syncPermissions(['beneficiaries.read']);
 
-        // Create admin user
-        $user = User::firstOrCreate(
-            ['email' => 'admin@rockylinux.local'],
-            [
-                'name' => 'Rocky Linux',
-                'password' => 'rockly',
-            ]
-        );
-
-        $user->assignRole('Admin');
+        // Create users
+        User::factory()->superadmin()->create()->assignRole('superadmin');
+        User::factory()->operator()->create()->assignRole('operator');
+        User::factory()->asUser()->create()->assignRole('user');
     }
 }

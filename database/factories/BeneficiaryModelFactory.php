@@ -2,12 +2,16 @@
 
 namespace Database\Factories;
 
+use Domain\Beneficiaries\ValueObjects\Enum\BeneficiaryType;
+use Domain\Beneficiaries\ValueObjects\Enum\EducationStatus;
 use Domain\Beneficiaries\ValueObjects\Enum\GuardianRelationship;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Infrastructure\Beneficiaries\Models\BeneficiaryModel;
 use Infrastructure\Beneficiaries\Models\FamilyCardModel;
 use Infrastructure\Beneficiaries\Models\GuardianModel;
+use Shared\ValueObjects\Enum\EducationLevel;
+use Shared\ValueObjects\Enum\Gender;
 
 /**
  * @extends Factory<BeneficiaryModel>
@@ -20,8 +24,14 @@ class BeneficiaryModelFactory extends Factory
 
     public function definition(): array
     {
-        $type = fake()->randomElement(['child', 'elderly', 'disabled', 'general']);
-        $gender = fake()->randomElement(['male', 'female']);
+        $type = fake()->randomElement(array_map(
+            fn ($case) => $case->value,
+            BeneficiaryType::cases()
+        ));
+        $gender = fake()->randomElement(array_map(
+            fn ($case) => $case->value,
+            Gender::cases()
+        ));
 
         // Generate unique 16-digit NIK
         do {
@@ -44,8 +54,14 @@ class BeneficiaryModelFactory extends Factory
 
         // Type-specific attributes
         if ($type === 'child') {
-            $educationLevel = fake()->randomElement(['elementary', 'junior_high', 'senior_high', 'diploma', 'bachelor']);
-            $educationStatus = fake()->randomElement(['currently_enrolled', 'enrolled', 'not_enrolled', 'graduated', 'transferred', 'dropped_out']);
+            $educationLevel = fake()->randomElement(array_map(
+                fn ($case) => $case->value,
+                EducationLevel::cases()
+            ));
+            $educationStatus = fake()->randomElement(array_map(
+                fn ($case) => $case->value,
+                EducationStatus::cases()
+            ));
             $data['specific_attributes'] = [
                 'education' => [
                     'level' => $educationLevel,
@@ -80,7 +96,10 @@ class BeneficiaryModelFactory extends Factory
                 $guardian->person = [
                     'name' => fake()->name(),
                     'occupation' => fake()->optional(0.7)->jobTitle(),
-                    'education' => fake()->randomElement(['elementary', 'junior_high', 'senior_high', 'diploma', 'bachelor', 'master', null]),
+                    'education' => fake()->randomElement([
+                        ...array_map(fn ($case) => $case->value, EducationLevel::cases()),
+                        null,
+                    ]),
                     'address' => [
                         'street' => fake()->streetAddress(),
                         'rt' => fake()->numerify('###'),
@@ -92,7 +111,12 @@ class BeneficiaryModelFactory extends Factory
                         'postal_code' => fake()->numerify('#####'),
                     ],
                     'contact' => [
-                        'phone' => fake()->phoneNumber(),
+                        'phone' => fake()->randomElement([
+                            '08' . fake()->numerify('##########'),    // 08 + 10 digit = 12 total
+                            '+628' . fake()->numerify('########'),    // +628 + 8 digit = 12 total  
+                            '0812' . fake()->numerify('########'),    // 0812 + 8 digit = 12 total
+                            '0878' . fake()->numerify('########'),    // 0878 + 8 digit = 12 total
+                        ]),
                         'email' => fake()->email(),
                     ],
                 ];

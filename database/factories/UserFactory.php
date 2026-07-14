@@ -18,11 +18,6 @@ class UserFactory extends Factory
     protected static string $password = 'rockly';
 
     /**
-     * The current email being used by the factory.
-     */
-    protected static string $email = 'admin@rockylinux.local';
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -31,9 +26,9 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake('id_ID')->name(),
-            'email' => static::$email ??= fake('id_ID')->unique()->safeEmail(),
+            'email' => fake('id_ID')->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password,
             'remember_token' => Str::random(10),
         ];
     }
@@ -45,6 +40,30 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function superadmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Administrator',
+            'email' => 'admin@rockylinux.local',
+        ]);
+    }
+
+    public function operator(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Operator',
+            'email' => 'operator@rockylinux.local',
+        ]);
+    }
+
+    public function asUser(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'User',
+            'email' => 'user@rockylinux.local',
         ]);
     }
 }

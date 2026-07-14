@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Infrastructure\Beneficiaries\Models\BeneficiaryModel;
 use Infrastructure\Beneficiaries\Models\FamilyCardModel;
@@ -11,10 +10,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create test user if not exists
-        User::firstOrCreate(User::factory()->definition());
-
-        // die;
+        $this->call(RolePermissionSeeder::class);
 
         // Create family cards
         $familyCards = FamilyCardModel::factory(25)->create();
