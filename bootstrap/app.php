@@ -11,6 +11,7 @@ use Shared\Exceptions\InvalidIdentifierException;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -46,14 +47,14 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 400);
         });
 
-        $exceptions->render(function (\InvalidArgumentException $e) {
+        $exceptions->render(function (InvalidArgumentException $e) {
             return response()->json([
                 'error' => 'Unprocessable Entity',
                 'message' => $e->getMessage(),
             ], 422);
         });
 
-        $exceptions->render(function (\DomainException $e) {
+        $exceptions->render(function (DomainException $e) {
             return response()->json([
                 'error' => 'Unprocessable Entity',
                 'message' => $e->getMessage(),
