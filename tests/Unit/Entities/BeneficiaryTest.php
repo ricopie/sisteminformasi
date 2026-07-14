@@ -208,8 +208,9 @@ final class BeneficiaryTest extends TestCase
             '2010-01-01',
             Gender::MALE,
             $familyCardId,
+            true,
             $childAttributes,
-            $guardian,
+            $guardian,               // Guardian ...$guardians (variadic)
         );
 
         $this->assertSame($domainId, $beneficiary->id());

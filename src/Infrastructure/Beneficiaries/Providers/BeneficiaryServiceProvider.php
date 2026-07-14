@@ -30,6 +30,7 @@ use Presentation\Beneficiaries\Http\Controllers\GetBeneficiaryController;
 use Presentation\Beneficiaries\Http\Controllers\ListBeneficiariesController;
 use Presentation\Beneficiaries\Http\Controllers\RegisterBeneficiaryController;
 use Presentation\Beneficiaries\Http\Controllers\UpdateBeneficiaryController;
+use Presentation\Beneficiaries\Http\Controllers\UpdateBeneficiaryStatusController;
 
 final class BeneficiaryServiceProvider extends ServiceProvider
 {
@@ -79,14 +80,16 @@ final class BeneficiaryServiceProvider extends ServiceProvider
         Event::listen(BeneficiaryUpdated::class, LogBeneficiaryUpdated::class);
         Event::listen(BeneficiaryDeleted::class, LogBeneficiaryDeleted::class);
 
-        Route::prefix('beneficiaries')
+        Route::prefix('api/beneficiaries')
+            ->middleware('auth:sanctum')
             ->as('beneficiaries.')
             ->group(function (): void {
                 Route::get('/', ListBeneficiariesController::class)->name('index');
                 Route::post('/', RegisterBeneficiaryController::class)->name('store');
-                Route::get('{id}', GetBeneficiaryController::class)->name('show');
-                Route::put('{id}', UpdateBeneficiaryController::class)->name('update');
-                Route::delete('{id}', DeleteBeneficiaryController::class)->name('delete');
+                Route::get('{secure_beneficiary}', GetBeneficiaryController::class)->name('show');
+                Route::put('{secure_beneficiary}', UpdateBeneficiaryController::class)->name('update');
+                Route::patch('{secure_beneficiary}/status', UpdateBeneficiaryStatusController::class)->name('status');
+                Route::delete('{secure_beneficiary}', DeleteBeneficiaryController::class)->name('delete');
             });
     }
 }

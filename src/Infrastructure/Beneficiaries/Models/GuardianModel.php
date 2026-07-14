@@ -2,6 +2,7 @@
 
 namespace Infrastructure\Beneficiaries\Models;
 
+use Database\Factories\GuardianModelFactory;
 use Domain\Beneficiaries\Entities\Guardian;
 use Domain\Beneficiaries\ValueObjects\Enum\GuardianRelationship;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -23,11 +24,10 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  */
 class GuardianModel extends Model implements CipherSweetEncrypted
 {
-    use HasFactory,
-        HasUlids,
-        SoftDeletes,
-        UsesCipherSweet;
-
+    use HasFactory;
+    use HasUlids;
+    use SoftDeletes;
+    use UsesCipherSweet;
     protected $table = 'guardians';
 
     protected $fillable = ['person', 'relationship'];
@@ -45,6 +45,11 @@ class GuardianModel extends Model implements CipherSweetEncrypted
         $encryptedRow
             ->addField('person')
             ->addBlindIndex('person', new BlindIndex('person_index'));
+    }
+
+    protected static function newFactory(): GuardianModelFactory
+    {
+        return GuardianModelFactory::new();
     }
 
     public function beneficiary(): BelongsTo
