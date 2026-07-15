@@ -10,10 +10,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "aws/aws-sdk-php": "^3.388",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "spatie/laravel-ciphersweet": "^1.8",
-        "spatie/laravel-data": "^4.23"
+        "spatie/laravel-ciphersweet": "^1.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -29,13 +29,9 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Copie\\": "src/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Domain\\": "src/Domain/",
-            "Application\\": "src/Application/",
-            "Infrastructure\\": "src/Infrastructure/",
-            "Presentation\\": "src/Presentation/",
-            "Shared\\": "src/Shared/"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
@@ -56,15 +52,25 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
         ],
-        "analyse": "vendor/bin/phpstan analyse --ansi",
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
-        "test-coverage": "@php artisan test --coverage",
+        "test:coverage": "@php artisan test --coverage",
         "format": "vendor/bin/pint",
-        "rector": "vendor/bin/rector process --dry-run",
-        "rector-fix": "vendor/bin/rector process",
+        "analyse": "vendor/bin/phpstan analyse",
+        "refactor": "vendor/bin/rector process --dry-run",
+        "refactor:fix": "vendor/bin/rector process",
+        "check": [
+            "@format",
+            "@refactor",
+            "@analyse",
+            "@test"
+        ],
+        "fix": [
+            "@refactor:fix",
+            "@format"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -87,6 +93,9 @@
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "branch-alias": {
+            "dev-master": "1.x-dev"
         }
     },
     "config": {

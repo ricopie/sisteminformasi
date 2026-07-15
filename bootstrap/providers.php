@@ -1,11 +1,11 @@
 <?php
 
 use App\Providers\AppServiceProvider;
-use App\Providers\ModulesServiceProvider;
-use Infrastructure\Security\Providers\SecurityServiceProvider;
+use Copie\Shared\Infrastructure\Laravel\Providers\EncryptionServiceProvider;
+use Copie\Shared\Infrastructure\Laravel\Providers\LaravelServiceProvider;
 
 return [
     AppServiceProvider::class,
-    ModulesServiceProvider::class,
-    SecurityServiceProvider::class,
+    LaravelServiceProvider::class,
+    EncryptionServiceProvider::class,
 ];
