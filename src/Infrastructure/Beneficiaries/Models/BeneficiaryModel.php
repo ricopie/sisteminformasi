@@ -20,6 +20,7 @@ use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
+use Shared\ValueObjects\DomainId;
 
 /**
  * @property string $id
@@ -118,5 +119,14 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
     public function newUniqueId(): string
     {
         return Beneficiary::newId()->value;
+    }
+
+    /**
+     * Get the domain identifier for this model.
+     * Matches the domain entity's id() method for API Resource compatibility.
+     */
+    public function id(): DomainId
+    {
+        return new DomainId($this->getKey());
     }
 }
