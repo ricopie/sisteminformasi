@@ -30,6 +30,7 @@ class FamilyCardModel extends Model implements CipherSweetEncrypted
     use HasUlids;
     use SoftDeletes;
     use UsesCipherSweet;
+
     protected $table = 'family_card';
 
     protected $fillable = [

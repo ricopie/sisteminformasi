@@ -36,10 +36,10 @@ class GuardianModelFactory extends Factory
                 ],
                 'contact' => [
                     'phone' => fake()->randomElement([
-                        '08' . fake()->numerify('##########'),    // 08 + 10 digit = 12 total
-                        '+628' . fake()->numerify('########'),    // +628 + 8 digit = 12 total  
-                        '0812' . fake()->numerify('########'),    // 0812 + 8 digit = 12 total
-                        '0878' . fake()->numerify('########'),    // 0878 + 8 digit = 12 total
+                        '08'.fake()->numerify('##########'),    // 08 + 10 digit = 12 total
+                        '+628'.fake()->numerify('########'),    // +628 + 8 digit = 12 total
+                        '0812'.fake()->numerify('########'),    // 0812 + 8 digit = 12 total
+                        '0878'.fake()->numerify('########'),    // 0878 + 8 digit = 12 total
                     ]),
                     'email' => fake()->email(),
                 ],

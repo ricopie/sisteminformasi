@@ -14,16 +14,12 @@ final readonly class SecureIdService
 
     private string $cipher;
 
-    private int $nonceLength;
-
     public function __construct(
         ?string $key = null,
         string $cipher = 'aes-256-gcm',
-        int $nonceLength = 12,
+        private int $nonceLength = 12,
     ) {
         $key ??= config('secureid.key');
-        $cipher ??= config('secureid.cipher', 'aes-256-gcm');
-        $nonceLength ??= (int) config('secureid.nonce_length', 12);
 
         if (blank($key)) {
             throw new \RuntimeException(
@@ -41,11 +37,10 @@ final readonly class SecureIdService
         }
 
         if (! in_array($cipher, openssl_get_cipher_methods(), true)) {
-            throw new \RuntimeException('Unsupported cipher: ' . $cipher);
+            throw new \RuntimeException('Unsupported cipher: '.$cipher);
         }
 
         $this->cipher = $cipher;
-        $this->nonceLength = $nonceLength;
     }
 
     /**
@@ -154,10 +149,10 @@ final readonly class SecureIdService
      */
     private function getContextPrefix(string $context): string
     {
-        $prefix = config('secureid.contexts.' . $context);
+        $prefix = config('secureid.contexts.'.$context);
 
         if (! is_string($prefix) || $prefix === '') {
-            throw new \InvalidArgumentException('Unknown or invalid context: ' . $context);
+            throw new \InvalidArgumentException('Unknown or invalid context: '.$context);
         }
 
         return $prefix;

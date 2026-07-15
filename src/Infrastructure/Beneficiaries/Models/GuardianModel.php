@@ -28,6 +28,7 @@ class GuardianModel extends Model implements CipherSweetEncrypted
     use HasUlids;
     use SoftDeletes;
     use UsesCipherSweet;
+
     protected $table = 'guardians';
 
     protected $fillable = ['person', 'relationship'];

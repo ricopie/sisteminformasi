@@ -14,12 +14,6 @@ final class SecurityServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Merge config
-        $this->mergeConfigFrom(
-            __DIR__.'/../Config/secureid.php',
-            'secureid',
-        );
-
         // Register SecureIdService as singleton
         $this->app->singleton(SecureIdService::class, fn ($app): SecureIdService => new SecureIdService(
             key: config('secureid.key'),

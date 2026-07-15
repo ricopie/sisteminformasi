@@ -42,6 +42,7 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
     use HasUlids;
     use SoftDeletes;
     use UsesCipherSweet;
+
     /**
      * The table associated with the model.
      */
