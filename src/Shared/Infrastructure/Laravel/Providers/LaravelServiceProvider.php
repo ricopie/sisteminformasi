@@ -14,10 +14,12 @@ class LaravelServiceProvider extends ServiceProvider
     /** @var list<string> */
     private array $discoveredModules = [];
 
-    public function boot(): void
+    public function register(): void
     {
-        $this->contextsPath = base_path('src/Contexts');
+        $this->app->register(EncryptionServiceProvider::class);
 
+        // Auto-Discover Providers from Boundary Context
+        $this->contextsPath = base_path('src/Contexts');
         $this->discoverContexts();
     }
 
