@@ -6,6 +6,8 @@ namespace Copie\Contexts\Beneficiary\Domain;
 
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Entities\Guardian;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
+use Copie\Contexts\Beneficiary\Domain\Enums\GuardianRelationship;
 use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryCreated;
 use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryDeleted;
 use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryUpdated;
@@ -34,7 +36,7 @@ class Beneficiary extends AggregateRoot
      * @var array<string, class-string<SpecificAttributes>>
      */
     private const TYPE_ATTRIBUTE_MAP = [
-        BeneficiaryType::Child->value => ChildAttributes::class,
+        BeneficiaryType::CHILD->value => ChildAttributes::class,
     ];
 
     private NationalIdentityNumber $nationalIdentityNumber;
@@ -278,8 +280,8 @@ class Beneficiary extends AggregateRoot
     {
         $guardian = Guardian::create(
             person: $person,
-            beneficiaryId: $this->id(),
-            relationship: $guardianRelationship,
+            guardianRelationship: $guardianRelationship,
+            domainId: $this->id(),
         );
 
         $this->guardians[] = $guardian;

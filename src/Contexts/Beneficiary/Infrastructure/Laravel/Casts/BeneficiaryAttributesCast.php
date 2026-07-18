@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Infrastructure\Laravel\Casts;
 
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -36,7 +36,7 @@ class BeneficiaryAttributesCast implements CastsAttributes
         }
 
         return match (BeneficiaryType::tryFrom($attributes['type'] ?? '')) {
-            BeneficiaryType::Child => ChildAttributes::fromArray($data),
+            BeneficiaryType::CHILD => ChildAttributes::fromArray($data),
             default => null,
         };
     }

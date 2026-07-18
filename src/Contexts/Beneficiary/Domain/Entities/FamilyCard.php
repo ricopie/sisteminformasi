@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Domain\Entities;
 
-use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\BaseEntity;
 use Copie\Shared\Domain\ValueObjects\Address;
 use Copie\Shared\Domain\ValueObjects\DomainId;
@@ -17,15 +16,16 @@ use InvalidArgumentException;
  * Represents a Family Card (Kartu Keluarga / KK) that groups
  * family members together. Managed by Beneficiary aggregate root.
  */
-class FamilyCard extends BaseEntity
+final class FamilyCard extends BaseEntity
 {
-    public function __construct(
-        #[NotBlank(message: 'Family card number is required')]
-        public readonly string $number,
-        #[NotBlank(message: 'Head of family name is required')]
-        public readonly string $headOfFamilyName,
-        public readonly ?Address $address = null,
-    ) {
+    private string $number;
+
+    private string $headOfFamilyName;
+
+    private ?Address $address = null;
+
+    protected function __construct()
+    {
         parent::__construct();
     }
 
@@ -34,11 +34,12 @@ class FamilyCard extends BaseEntity
         string $headOfFamilyName,
         ?Address $address = null,
     ): self {
-        return new self(
-            number: $number,
-            headOfFamilyName: $headOfFamilyName,
-            address: $address,
-        );
+        $entity = new self;
+        $entity->number = $number;
+        $entity->headOfFamilyName = $headOfFamilyName;
+        $entity->address = $address;
+
+        return $entity;
     }
 
     public static function reconstitute(
@@ -49,13 +50,12 @@ class FamilyCard extends BaseEntity
         string $headOfFamilyName,
         ?Address $address = null,
     ): self {
-        self::fromPersistence($domainId, $createdAt, $updatedAt);
+        $familyCard = self::fromPersistence($domainId, $createdAt, $updatedAt);
+        $familyCard->number = $number;
+        $familyCard->headOfFamilyName = $headOfFamilyName;
+        $familyCard->address = $address;
 
-        return new self(
-            number: $number,
-            headOfFamilyName: $headOfFamilyName,
-            address: $address,
-        );
+        return $familyCard;
     }
 
     public function number(): string
@@ -73,20 +73,12 @@ class FamilyCard extends BaseEntity
         return $this->address;
     }
 
-    /**
-     * Update the family's address.
-     */
     public function updateAddress(Address $address): void
     {
-        // FamilyCard uses readonly properties, so we reconstruct via parent timestamp.
-        // In V2 embedded design, the Beneficiary aggregate root will re-create the
-        // FamilyCard entity with updated values. This method is kept for API consistency.
+        $this->address = $address;
         $this->updateTimestamp();
     }
 
-    /**
-     * Update the head of family name.
-     */
     public function changeHeadOfFamily(string $name): void
     {
         $name = trim($name);
@@ -95,6 +87,7 @@ class FamilyCard extends BaseEntity
             throw new InvalidArgumentException('Head of family name must not be empty.');
         }
 
+        $this->headOfFamilyName = $name;
         $this->updateTimestamp();
     }
 

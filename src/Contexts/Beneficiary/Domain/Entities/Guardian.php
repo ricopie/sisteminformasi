@@ -16,13 +16,16 @@ use DateTimeImmutable;
  * Represents a guardian (wali) responsible for a beneficiary.
  * Managed by Beneficiary aggregate root.
  */
-class Guardian extends BaseEntity
+final class Guardian extends BaseEntity
 {
-    public function __construct(
-        public readonly DomainId $beneficiaryId,
-        public readonly Person $person,
-        public readonly GuardianRelationship $relationship,
-    ) {
+    private DomainId $domainId;
+
+    private Person $person;
+
+    private GuardianRelationship $guardianRelationship;
+
+    protected function __construct()
+    {
         parent::__construct();
     }
 
@@ -31,11 +34,12 @@ class Guardian extends BaseEntity
         Person $person,
         GuardianRelationship $guardianRelationship,
     ): self {
-        return new self(
-            beneficiaryId: $domainId,
-            person: $person,
-            relationship: $guardianRelationship,
-        );
+        $entity = new self;
+        $entity->domainId = $domainId;
+        $entity->person = $person;
+        $entity->guardianRelationship = $guardianRelationship;
+
+        return $entity;
     }
 
     public static function reconstitute(
@@ -46,18 +50,17 @@ class Guardian extends BaseEntity
         Person $person,
         GuardianRelationship $guardianRelationship,
     ): self {
-        self::fromPersistence($id, $createdAt, $updatedAt);
+        $guardian = self::fromPersistence($id, $createdAt, $updatedAt);
+        $guardian->domainId = $beneficiaryId;
+        $guardian->person = $person;
+        $guardian->guardianRelationship = $guardianRelationship;
 
-        return new self(
-            beneficiaryId: $beneficiaryId,
-            person: $person,
-            relationship: $guardianRelationship,
-        );
+        return $guardian;
     }
 
     public function beneficiaryId(): DomainId
     {
-        return $this->beneficiaryId;
+        return $this->domainId;
     }
 
     public function person(): Person
@@ -67,35 +70,24 @@ class Guardian extends BaseEntity
 
     public function relationship(): GuardianRelationship
     {
-        return $this->relationship;
+        return $this->guardianRelationship;
     }
 
-    /**
-     * Change the guardian's personal information.
-     *
-     * Note: Since V2 Guardian uses readonly properties, the Beneficiary
-     * aggregate root will re-create the Guardian with updated values
-     * when performing a full replacement update. This method is kept
-     * for API consistency with V1.
-     */
     public function updatePerson(Person $person): void
     {
+        $this->person = $person;
         $this->updateTimestamp();
     }
 
-    /**
-     * Change the guardian's relationship to the beneficiary.
-     */
     public function changeRelationship(GuardianRelationship $guardianRelationship): void
     {
+        $this->guardianRelationship = $guardianRelationship;
         $this->updateTimestamp();
     }
 
-    /**
-     * Transfer this guardian to a different beneficiary.
-     */
     public function transferTo(DomainId $domainId): void
     {
+        $this->domainId = $domainId;
         $this->updateTimestamp();
     }
 
@@ -103,9 +95,9 @@ class Guardian extends BaseEntity
     {
         return [
             'id' => $this->id()->value,
-            'beneficiary_id' => $this->beneficiaryId->value,
+            'beneficiary_id' => $this->domainId->value,
             'person' => $this->person->toArray(),
-            'relationship' => $this->relationship->value,
+            'relationship' => $this->guardianRelationship->value,
         ];
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Domain\ValueObjects;
 
-use InvalidArgumentException;
-
-class ChildAttributes implements SpecificAttributes
+final readonly class ChildAttributes implements SpecificAttributes
 {
     /**
      * @param  Education  $education  Current education
@@ -14,12 +12,11 @@ class ChildAttributes implements SpecificAttributes
      * @param  string[]  $hobbies  List of hobbies
      */
     public function __construct(
-        public readonly Education $education,
-        public readonly array $educationHistory = [],
-        public readonly array $hobbies = [],
+        public Education $education,
+        public array $educationHistory = [],
+        public array $hobbies = [],
     ) {
-        $this->validateEducationHistory();
-        $this->validateHobbies();
+        // No need for manual type validation — PHP handles it
     }
 
     public static function fromArray(array $data): static
@@ -44,27 +41,5 @@ class ChildAttributes implements SpecificAttributes
             ),
             'hobbies' => $this->hobbies,
         ];
-    }
-
-    private function validateEducationHistory(): void
-    {
-        foreach ($this->educationHistory as $item) {
-            if (! $item instanceof Education) {
-                throw new InvalidArgumentException(
-                    'Each education history item must be an Education instance.'
-                );
-            }
-        }
-    }
-
-    private function validateHobbies(): void
-    {
-        foreach ($this->hobbies as $hobby) {
-            if (! is_string($hobby) || trim($hobby) === '') {
-                throw new InvalidArgumentException(
-                    'Each hobby must be a non-empty string.'
-                );
-            }
-        }
     }
 }

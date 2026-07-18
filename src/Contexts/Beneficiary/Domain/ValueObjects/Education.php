@@ -10,7 +10,7 @@ use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\ValueObject;
 use InvalidArgumentException;
 
-class Education extends ValueObject
+final class Education extends ValueObject
 {
     public function __construct(
         public readonly EducationLevel $level,

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Copie\Contexts\Beneficiary\Infrastructure\Laravel\Eloquent;
 
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Entities\Guardian;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Enums\GuardianRelationship;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
@@ -20,6 +20,9 @@ use Copie\Shared\Domain\ValueObjects\DomainId;
 use Copie\Shared\Domain\ValueObjects\Person;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use ParagonIE\CipherSweet\BlindIndex;
+use ParagonIE\CipherSweet\EncryptedRow;
 use Spatie\LaravelCipherSweet\Concerns\UsesCipherSweet;
 use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
 
@@ -33,6 +36,24 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  *  - High: nik, first_name, last_name, family_card_number, family_card_head_of_family_name
  *  - Medium: birth_place, birth_date, family_card_address
  *  - Low: type, gender — not encrypted
+ *
+ * @property Carbon $created_at
+ * @property Carbon|null $updated_at
+ * @property string $nik
+ * @property string $nik_blind_index
+ * @property string $type
+ * @property string $first_name
+ * @property string $last_name
+ * @property string|null $nick_name
+ * @property string $birth_place
+ * @property string $birth_date
+ * @property string $gender
+ * @property bool $is_active
+ * @property string $family_card_number
+ * @property string $family_card_head_of_family_name
+ * @property array|null $family_card_address
+ * @property array|null $specific_attributes
+ * @property array|null $guardians
  */
 class BeneficiaryModel extends Model implements CipherSweetEncrypted
 {
@@ -93,7 +114,7 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
         $encryptedRow->addTextField('family_card_head_of_family_name');
         $encryptedRow->addTextField('family_card_address');
 
-        $encryptedRow->addBlindIndex('nik', new BlindIndex('nik_blind_index', 32));
+        $encryptedRow->addBlindIndex('nik', new BlindIndex('nik_blind_index', filterBits: 32));
     }
 
     /**
@@ -103,6 +124,7 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
     {
         // Reconstitute FamilyCard
         $familyCard = FamilyCard::reconstitute(
+            domainId: DomainId::fromString($this->id),
             createdAt: $this->created_at->toDateTimeImmutable(),
             updatedAt: $this->updated_at?->toDateTimeImmutable(),
             number: $this->family_card_number,
@@ -110,7 +132,6 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             address: isset($this->family_card_address)
                 ? Address::fromArray($this->family_card_address)
                 : null,
-            id: DomainId::fromString($this->id),
         );
 
         // Reconstitute Guardians
@@ -123,15 +144,18 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
                     : null,
                 beneficiaryId: DomainId::fromString($gData['beneficiary_id']),
                 person: Person::fromArray($gData['person']),
-                relationship: GuardianRelationship::from($gData['relationship']),
+                guardianRelationship: GuardianRelationship::from($gData['relationship']),
             ),
             $this->guardians ?? [],
         );
 
         // Reconstitute Beneficiary
         return Beneficiary::reconstitute(
+            domainId: DomainId::fromString($this->id),
             createdAt: $this->created_at->toDateTimeImmutable(),
             updatedAt: $this->updated_at?->toDateTimeImmutable(),
+            nationalIdentityNumber: new NationalIdentityNumber($this->nik),
+            beneficiaryType: BeneficiaryType::from($this->type),
             name: new Name(
                 firstName: $this->first_name,
                 lastName: $this->last_name,
@@ -144,9 +168,6 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             isActive: $this->is_active,
             specificAttributes: $this->buildSpecificAttributes(),
             guardians: $guardians,
-            id: DomainId::fromString($this->id),
-            nik: new NationalIdentityNumber($this->nik),
-            type: BeneficiaryType::from($this->type),
         );
     }
 

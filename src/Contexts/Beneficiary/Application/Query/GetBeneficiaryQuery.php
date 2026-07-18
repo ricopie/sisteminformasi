@@ -6,7 +6,7 @@ namespace Copie\Contexts\Beneficiary\Application\Query;
 
 use Copie\Shared\Application\DTO;
 
-class GetBeneficiaryQuery extends DTO
+final class GetBeneficiaryQuery extends DTO
 {
     public function __construct(public readonly string $id) {}
 

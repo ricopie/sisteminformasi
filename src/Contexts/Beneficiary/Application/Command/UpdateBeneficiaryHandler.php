@@ -6,8 +6,8 @@ namespace Copie\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
@@ -88,7 +88,7 @@ class UpdateBeneficiaryHandler
             foreach ($updateBeneficiaryCommand->guardians as $guardianData) {
                 $beneficiary->addGuardian(
                     person: Person::fromArray($guardianData['person'] ?? []),
-                    relationship: $guardianData['relationship'] ?? 'other',
+                    guardianRelationship: $guardianData['relationship'] ?? 'other',
                 );
             }
         }
@@ -107,7 +107,7 @@ class UpdateBeneficiaryHandler
     private function resolveSpecificAttributes(BeneficiaryType $beneficiaryType, array $data): ?SpecificAttributes
     {
         return match ($beneficiaryType) {
-            BeneficiaryType::Child => ChildAttributes::fromArray($data),
+            BeneficiaryType::CHILD => ChildAttributes::fromArray($data),
             default => null,
         };
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Domain\Events;
 
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Shared\Domain\DomainEvent;
 use Copie\Shared\Domain\ValueObjects\DomainId;

@@ -9,9 +9,9 @@ use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\ValueObject;
 use Stringable;
 
-class Address extends ValueObject implements Stringable
+final class Address extends ValueObject implements Stringable
 {
-    public function __construct(
+    final public function __construct(
         #[NotBlank(message: 'Street is required')]
         public readonly string $street,
 

@@ -9,9 +9,9 @@ use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\Attributes\Phone;
 use Copie\Shared\Domain\ValueObject;
 
-class Contact extends ValueObject
+final class Contact extends ValueObject
 {
-    public function __construct(
+    final public function __construct(
         #[NotBlank(message: 'Phone is required')]
         #[Phone]
         public readonly string $phone,

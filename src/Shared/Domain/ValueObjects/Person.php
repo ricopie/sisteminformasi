@@ -7,9 +7,9 @@ namespace Copie\Shared\Domain\ValueObjects;
 use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\ValueObject;
 
-class Person extends ValueObject
+final class Person extends ValueObject
 {
-    public function __construct(
+    final public function __construct(
         #[NotBlank(message: 'Person name is required')]
         public readonly string $name,
 

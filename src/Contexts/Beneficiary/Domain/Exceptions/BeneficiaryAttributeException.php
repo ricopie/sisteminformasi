@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Domain\Exceptions;
 
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use DomainException;
 
 /**

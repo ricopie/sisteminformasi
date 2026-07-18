@@ -8,7 +8,7 @@ use Copie\Shared\Domain\Attributes\Digits;
 use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\ValueObject;
 
-class NationalIdentityNumber extends ValueObject
+final class NationalIdentityNumber extends ValueObject
 {
     public function __construct(
         #[NotBlank(message: 'NIK is required')]

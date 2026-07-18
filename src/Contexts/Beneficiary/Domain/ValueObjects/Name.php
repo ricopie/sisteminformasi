@@ -7,7 +7,7 @@ namespace Copie\Contexts\Beneficiary\Domain\ValueObjects;
 use Copie\Shared\Domain\Attributes\NotBlank;
 use Copie\Shared\Domain\ValueObject;
 
-class Name extends ValueObject
+final class Name extends ValueObject
 {
     public function __construct(
         #[NotBlank]

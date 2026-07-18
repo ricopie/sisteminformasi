@@ -6,8 +6,8 @@ namespace Copie\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
-use Copie\Contexts\Beneficiary\Domain\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
+use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Exceptions\BeneficiaryAlreadyExistsException;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
@@ -55,6 +55,8 @@ class CreateBeneficiaryHandler
 
         // 4. Create Beneficiary
         $beneficiary = Beneficiary::create(
+            nationalIdentityNumber: $nationalIdentityNumber,
+            beneficiaryType: $beneficiaryType,
             name: new Name(
                 firstName: $createBeneficiaryCommand->firstName,
                 lastName: $createBeneficiaryCommand->lastName,
@@ -65,8 +67,6 @@ class CreateBeneficiaryHandler
             gender: Gender::from($createBeneficiaryCommand->gender),
             familyCard: $familyCard,
             specificAttributes: $specificAttributes,
-            nik: $nationalIdentityNumber,
-            type: $beneficiaryType,
         );
 
         // 5. Save
@@ -87,7 +87,7 @@ class CreateBeneficiaryHandler
         }
 
         return match ($beneficiaryType) {
-            BeneficiaryType::Child => ChildAttributes::fromArray($data),
+            BeneficiaryType::CHILD => ChildAttributes::fromArray($data),
             default => null,
         };
     }
