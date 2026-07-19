@@ -25,7 +25,7 @@ final readonly class DomainId implements Stringable
      */
     public static function generate(): self
     {
-        return new self((new Ulid)->toRfc4122());
+        return new self((new Ulid)->toBase32());
     }
 
     /**
