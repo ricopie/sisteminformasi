@@ -279,9 +279,9 @@ class Beneficiary extends AggregateRoot
     public function addGuardian(Person $person, GuardianRelationship $guardianRelationship): Guardian
     {
         $guardian = Guardian::create(
+            domainId: $this->id(),
             person: $person,
             guardianRelationship: $guardianRelationship,
-            domainId: $this->id(),
         );
 
         $this->guardians[] = $guardian;

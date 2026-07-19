@@ -16,8 +16,6 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->register(EncryptionServiceProvider::class);
-
         // Auto-Discover Providers from Boundary Context
         $this->contextsPath = base_path('src/Contexts');
         $this->discoverContexts();

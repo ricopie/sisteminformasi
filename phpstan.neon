@@ -8,8 +8,3 @@ parameters:
 
    # Level 10 is the highest level
     level: 5
-
-    ignoreErrors:
-        -
-            identifier: larastan.noEnvCallsOutsideOfConfig
-            path: 'src/Shared/Infrastructure/Laravel/Config/encryption.php'
