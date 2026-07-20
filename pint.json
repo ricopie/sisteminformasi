@@ -1,0 +1,8 @@
+{
+    "preset": "laravel",
+    "paths": [
+        "src/Shared/Infrastructure",
+        "src/Contexts/*/Infrastructure/Laravel",
+        "app"
+    ]
+}

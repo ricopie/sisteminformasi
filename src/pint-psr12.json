@@ -1,0 +1,12 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "no_superfluous_phpdoc_tags": false
+    },
+    "paths": [
+        "src/Shared/Domain",
+        "src/Shared/Application",
+        "src/Contexts/*/Domain",
+        "src/Contexts/*/Application"
+    ]
+}

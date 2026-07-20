@@ -58,7 +58,7 @@ class ListBeneficiariesHandlerTest extends TestCase
                 return $this->createMock(LengthAwarePaginator::class);
             });
 
-        $listBeneficiariesQuery = new ListBeneficiariesQuery;
+        $listBeneficiariesQuery = new ListBeneficiariesQuery();
         $this->listBeneficiariesHandler->handle($listBeneficiariesQuery);
 
         $this->assertSame([], $capturedArgs[0]);

@@ -14,7 +14,8 @@ class Digits implements ValidationAttributeInterface
         public int $min = 1,
         public int $max = PHP_INT_MAX,
         public string $message = 'Value must be numeric digits only',
-    ) {}
+    ) {
+    }
 
     public function validate(mixed $value): void
     {

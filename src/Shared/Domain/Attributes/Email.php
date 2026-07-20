@@ -12,7 +12,8 @@ class Email implements ValidationAttributeInterface
 {
     public function __construct(
         public string $message = 'Invalid email format'
-    ) {}
+    ) {
+    }
 
     public function validate(mixed $value): void
     {

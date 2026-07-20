@@ -15,12 +15,9 @@ final class Contact extends ValueObject
         #[NotBlank(message: 'Phone is required')]
         #[Phone]
         public readonly string $phone,
-
         #[Email]
         public readonly ?string $emailAddress = null,
-
         public readonly ?string $website = null,
-
         public readonly ?string $addressText = null
     ) {
         $this->validate();

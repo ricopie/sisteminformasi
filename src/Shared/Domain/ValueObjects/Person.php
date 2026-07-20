@@ -12,13 +12,9 @@ final class Person extends ValueObject
     final public function __construct(
         #[NotBlank(message: 'Person name is required')]
         public readonly string $name,
-
         public readonly ?string $occupation = null,
-
         public readonly ?string $education = null,
-
         public readonly ?Address $address = null,
-
         public readonly ?Contact $contact = null,
     ) {
         $this->validate();

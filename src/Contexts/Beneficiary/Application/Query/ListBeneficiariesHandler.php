@@ -16,7 +16,8 @@ class ListBeneficiariesHandler
 {
     public function __construct(
         private readonly BeneficiaryQueryInterface $beneficiaryQuery,
-    ) {}
+    ) {
+    }
 
     public function handle(ListBeneficiariesQuery $listBeneficiariesQuery): LengthAwarePaginator
     {

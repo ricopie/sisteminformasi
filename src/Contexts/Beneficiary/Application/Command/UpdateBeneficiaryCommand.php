@@ -28,7 +28,8 @@ final class UpdateBeneficiaryCommand extends DTO
         public readonly ?array $specificAttributes = null,
         public readonly ?array $guardians = null,
         public readonly ?bool $isActive = null,
-    ) {}
+    ) {
+    }
 
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): static

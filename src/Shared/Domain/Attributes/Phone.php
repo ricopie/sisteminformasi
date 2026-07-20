@@ -13,7 +13,8 @@ class Phone implements ValidationAttributeInterface
     public function __construct(
         public string $pattern = '/^(0|\+62)\d{8,13}$/',
         public string $message = 'Invalid phone number format'
-    ) {}
+    ) {
+    }
 
     public function validate(mixed $value): void
     {

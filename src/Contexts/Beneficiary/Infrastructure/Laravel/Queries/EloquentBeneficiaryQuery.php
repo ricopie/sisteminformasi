@@ -18,7 +18,8 @@ class EloquentBeneficiaryQuery implements BeneficiaryQueryInterface
 {
     public function __construct(
         private readonly BeneficiaryModel $beneficiaryModel,
-    ) {}
+    ) {
+    }
 
     /**
      * @param  array<string, mixed>  $filters  Supported: 'type', 'search'

@@ -26,7 +26,7 @@ abstract class BaseEntity
     protected function __construct()
     {
         $this->domainId = DomainId::generate();
-        $this->createdAt = new DateTimeImmutable;
+        $this->createdAt = new DateTimeImmutable();
     }
 
     /**
@@ -41,7 +41,7 @@ abstract class BaseEntity
         DateTimeImmutable $createdAt,
         ?DateTimeImmutable $updatedAt = null,
     ): static {
-        $static = new static;
+        $static = new static();
         $static->domainId = $domainId;
         $static->createdAt = $createdAt;
         $static->updatedAt = $updatedAt;
@@ -78,7 +78,7 @@ abstract class BaseEntity
      */
     protected function updateTimestamp(): void
     {
-        $this->updatedAt = new DateTimeImmutable;
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     /**

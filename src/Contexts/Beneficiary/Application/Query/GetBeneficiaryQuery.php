@@ -8,7 +8,9 @@ use Copie\Shared\Application\DTO;
 
 final class GetBeneficiaryQuery extends DTO
 {
-    public function __construct(public readonly string $id) {}
+    public function __construct(public readonly string $id)
+    {
+    }
 
     public static function fromArray(array $data): static
     {

@@ -17,7 +17,8 @@ final class ListBeneficiariesQuery extends DTO
     public function __construct(
         public readonly array $filters = [],
         public readonly int $perPage = 15,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): static
     {

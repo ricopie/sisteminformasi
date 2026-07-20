@@ -12,7 +12,8 @@ class GetBeneficiaryHandler
 {
     public function __construct(
         private readonly BeneficiaryRepositoryInterface $beneficiaryRepository,
-    ) {}
+    ) {
+    }
 
     public function handle(GetBeneficiaryQuery $getBeneficiaryQuery): ?Beneficiary
     {

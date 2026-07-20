@@ -30,7 +30,7 @@ final readonly class DomainId implements Stringable
      */
     public static function generate(): self
     {
-        return new self((new Ulid)->toBase32());
+        return new self((new Ulid())->toBase32());
     }
 
     /**

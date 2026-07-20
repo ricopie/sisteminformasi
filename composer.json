@@ -57,7 +57,10 @@
             "@php artisan test"
         ],
         "test:coverage": "@php artisan test --coverage",
-        "format": "vendor/bin/pint",
+        "format": [
+            "vendor/bin/pint",
+            "vendor/bin/pint --config=src/pint-psr12.json"
+        ],
         "analyse": "vendor/bin/phpstan analyse",
         "refactor": "vendor/bin/rector process --dry-run",
         "refactor:fix": "vendor/bin/rector process",

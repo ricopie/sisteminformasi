@@ -15,7 +15,8 @@ final readonly class ChildAttributes implements SpecificAttributes
         public Education $education,
         public array $educationHistory = [],
         public array $hobbies = [],
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): static
     {

@@ -13,7 +13,8 @@ final class DeleteBeneficiaryCommand extends DTO
 {
     public function __construct(
         public readonly string $id,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): static
     {

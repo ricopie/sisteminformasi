@@ -87,7 +87,7 @@ class Beneficiary extends AggregateRoot
             throw BeneficiaryAttributeException::attributesNotAllowed($beneficiaryType);
         }
 
-        $entity = new self;
+        $entity = new self();
         $entity->nationalIdentityNumber = $nationalIdentityNumber;
         $entity->beneficiaryType = $beneficiaryType;
         $entity->name = $name;

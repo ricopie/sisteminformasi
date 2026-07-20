@@ -12,7 +12,8 @@ class NotBlank implements ValidationAttributeInterface
 {
     public function __construct(
         public string $message = 'Value must not be blank'
-    ) {}
+    ) {
+    }
 
     public function validate(mixed $value): void
     {

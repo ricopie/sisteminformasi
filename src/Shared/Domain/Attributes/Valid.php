@@ -16,7 +16,7 @@ class Valid implements ValidationAttributeInterface
             return;
         }
 
-        $attributeValidator = new AttributeValidator;
+        $attributeValidator = new AttributeValidator();
         $attributeValidator->validate($value);
     }
 }

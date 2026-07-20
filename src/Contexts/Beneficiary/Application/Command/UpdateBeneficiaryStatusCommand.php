@@ -14,7 +14,8 @@ final class UpdateBeneficiaryStatusCommand extends DTO
     public function __construct(
         public readonly string $id,
         public readonly bool $isActive,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): static
     {

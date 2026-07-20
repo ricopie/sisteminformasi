@@ -21,7 +21,8 @@ class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterface
 {
     public function __construct(
         private readonly BeneficiaryModel $beneficiaryModel,
-    ) {}
+    ) {
+    }
 
     /** Find a beneficiary by its unique identifier. */
     public function findById(DomainId $domainId): ?Beneficiary

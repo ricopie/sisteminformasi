@@ -47,7 +47,7 @@ abstract class ValueObject
     private function getValidator(): AttributeValidator
     {
         if (! self::$attributeValidator instanceof AttributeValidator) {
-            self::$attributeValidator = new AttributeValidator;
+            self::$attributeValidator = new AttributeValidator();
         }
 
         return self::$attributeValidator;

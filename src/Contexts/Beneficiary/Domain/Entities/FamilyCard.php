@@ -35,7 +35,7 @@ final class FamilyCard extends BaseEntity
         string $headOfFamilyName,
         ?Address $address = null,
     ): self {
-        $entity = new self;
+        $entity = new self();
         $entity->number = $number;
         $entity->headOfFamilyName = $headOfFamilyName;
         $entity->address = $address;

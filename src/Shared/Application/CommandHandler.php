@@ -17,7 +17,8 @@ abstract class CommandHandler
 {
     public function __construct(
         protected readonly EventDispatcherInterface $eventDispatcher,
-    ) {}
+    ) {
+    }
 
     /**
      * Dispatch all domain events recorded by the aggregate since last save.

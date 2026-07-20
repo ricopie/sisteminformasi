@@ -14,27 +14,20 @@ final class Address extends ValueObject implements Stringable
     final public function __construct(
         #[NotBlank(message: 'Street is required')]
         public readonly string $street,
-
         #[NotBlank(message: 'RT is required')]
         #[Digits(min: 2, max: 3, message: 'RT must be 2-3 digits')]
         public readonly string $rt,
-
         #[NotBlank(message: 'RW is required')]
         #[Digits(min: 2, max: 3, message: 'RW must be 2-3 digits')]
         public readonly string $rw,
-
         #[NotBlank(message: 'Village is required')]
         public readonly string $village,
-
         #[NotBlank(message: 'District is required')]
         public readonly string $district,
-
         #[NotBlank(message: 'City is required')]
         public readonly string $city,
-
         #[NotBlank(message: 'Province is required')]
         public readonly string $province,
-
         #[NotBlank(message: 'Postal code is required')]
         #[Digits(min: 5, max: 5, message: 'Postal code must be 5 digits')]
         public readonly string $postalCode,

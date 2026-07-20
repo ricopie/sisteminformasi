@@ -51,7 +51,7 @@ class LaravelServiceProvider extends ServiceProvider
     {
         $directories = [];
 
-        $finder = new Finder;
+        $finder = new Finder();
         $finder->depth(0)->directories()->in($this->contextsPath);
 
         foreach ($finder as $directory) {

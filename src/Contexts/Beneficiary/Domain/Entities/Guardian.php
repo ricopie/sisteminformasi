@@ -35,7 +35,7 @@ final class Guardian extends BaseEntity
         Person $person,
         GuardianRelationship $guardianRelationship,
     ): self {
-        $entity = new self;
+        $entity = new self();
         $entity->domainId = $domainId;
         $entity->person = $person;
         $entity->guardianRelationship = $guardianRelationship;

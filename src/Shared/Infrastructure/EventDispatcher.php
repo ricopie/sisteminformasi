@@ -12,7 +12,8 @@ class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
         private readonly Dispatcher $dispatcher
-    ) {}
+    ) {
+    }
 
     public function dispatch(DomainEvent $domainEvent): void
     {

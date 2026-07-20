@@ -21,7 +21,8 @@ final class CreateBeneficiaryCommand extends DTO
         public readonly string $familyCardNumber,
         public readonly string $headOfFamilyName,
         public readonly ?array $specificAttributes,
-    ) {}
+    ) {
+    }
 
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): static
