@@ -18,6 +18,7 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\Enums\Gender;
+use Copie\Shared\Domain\EventDispatcherInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,13 +30,16 @@ class CreateBeneficiaryHandlerTest extends TestCase
      */
     private MockObject $beneficiaryRepository;
 
+    private MockObject $eventDispatcher;
+
     private CreateBeneficiaryHandler $createBeneficiaryHandler;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->beneficiaryRepository = $this->createMock(BeneficiaryRepositoryInterface::class);
-        $this->createBeneficiaryHandler = new CreateBeneficiaryHandler($this->beneficiaryRepository);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->createBeneficiaryHandler = new CreateBeneficiaryHandler($this->beneficiaryRepository, $this->eventDispatcher);
     }
 
     #[Test]

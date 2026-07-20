@@ -18,6 +18,7 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\Enums\Gender;
+use Copie\Shared\Domain\EventDispatcherInterface;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,6 +32,8 @@ class DeleteBeneficiaryHandlerTest extends TestCase
      */
     private MockObject $beneficiaryRepository;
 
+    private MockObject $eventDispatcher;
+
     private DeleteBeneficiaryHandler $deleteBeneficiaryHandler;
 
     private Beneficiary $existingBeneficiary;
@@ -39,7 +42,8 @@ class DeleteBeneficiaryHandlerTest extends TestCase
     {
         parent::setUp();
         $this->beneficiaryRepository = $this->createMock(BeneficiaryRepositoryInterface::class);
-        $this->deleteBeneficiaryHandler = new DeleteBeneficiaryHandler($this->beneficiaryRepository);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->deleteBeneficiaryHandler = new DeleteBeneficiaryHandler($this->beneficiaryRepository, $this->eventDispatcher);
         $this->existingBeneficiary = $this->createExistingBeneficiary();
     }
 
@@ -90,16 +94,16 @@ class DeleteBeneficiaryHandlerTest extends TestCase
             ->method('save')
             ->with($this->existingBeneficiary);
 
-        $deleteBeneficiaryCommand = new DeleteBeneficiaryCommand(id: $this->existingBeneficiary->id()->value);
-
         $this->existingBeneficiary->pullDomainEvents();
 
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->isInstanceOf(BeneficiaryDeleted::class));
+
+        $deleteBeneficiaryCommand = new DeleteBeneficiaryCommand(id: $this->existingBeneficiary->id()->value);
+
         $this->deleteBeneficiaryHandler->handle($deleteBeneficiaryCommand);
-
-        $eventsAfter = $this->existingBeneficiary->pullDomainEvents();
-
-        $this->assertCount(1, $eventsAfter);
-        $this->assertInstanceOf(BeneficiaryDeleted::class, $eventsAfter[0]);
     }
 
     private function createExistingBeneficiary(): Beneficiary

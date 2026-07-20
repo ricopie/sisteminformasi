@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
@@ -17,6 +15,7 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\Enums\Gender;
+use Copie\Shared\Domain\EventDispatcherInterface;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,6 +29,11 @@ class UpdateBeneficiaryStatusHandlerTest extends TestCase
      */
     private MockObject $beneficiaryRepository;
 
+    /**
+     * @var MockObject&EventDispatcherInterface
+     */
+    private MockObject $eventDispatcher;
+
     private UpdateBeneficiaryStatusHandler $updateBeneficiaryStatusHandler;
 
     private Beneficiary $existingBeneficiary;
@@ -38,7 +42,8 @@ class UpdateBeneficiaryStatusHandlerTest extends TestCase
     {
         parent::setUp();
         $this->beneficiaryRepository = $this->createMock(BeneficiaryRepositoryInterface::class);
-        $this->updateBeneficiaryStatusHandler = new UpdateBeneficiaryStatusHandler($this->beneficiaryRepository);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->updateBeneficiaryStatusHandler = new UpdateBeneficiaryStatusHandler($this->beneficiaryRepository, $this->eventDispatcher);
         $this->existingBeneficiary = $this->createExistingBeneficiary();
     }
 
