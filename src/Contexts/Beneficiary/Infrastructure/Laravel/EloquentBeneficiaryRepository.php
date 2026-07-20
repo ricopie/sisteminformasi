@@ -23,6 +23,7 @@ class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterface
         private readonly BeneficiaryModel $beneficiaryModel,
     ) {}
 
+    /** Find a beneficiary by its unique identifier. */
     public function findById(DomainId $domainId): ?Beneficiary
     {
         $model = $this->beneficiaryModel->newQuery()->find($domainId->value);
@@ -34,10 +35,10 @@ class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterface
         return $model->toDomainEntity();
     }
 
+    /** Find a beneficiary by NIK. CipherSweet transparently decrypts for query resolution. */
     public function findByNik(NationalIdentityNumber $nationalIdentityNumber): ?Beneficiary
     {
-        // Query by blind index for efficient lookup on encrypted data.
-        // CipherSweet computes the blind index automatically via the model.
+        // CipherSweet transparently decrypts encrypted columns during query resolution.
         $model = $this->beneficiaryModel
             ->newQuery()
             ->where('nik', $nationalIdentityNumber->value)
@@ -50,17 +51,18 @@ class EloquentBeneficiaryRepository implements BeneficiaryRepositoryInterface
         return $model->toDomainEntity();
     }
 
+    /** Save a beneficiary (create or update) within a transaction. */
     public function save(Beneficiary $beneficiary): void
     {
         $beneficiaryModel = BeneficiaryModel::fromDomainEntity($beneficiary);
 
         // Use transaction to ensure atomicity
         DB::transaction(function () use ($beneficiaryModel): void {
-            // CipherSweet hooks handle encryption on save
             $beneficiaryModel->save();
         });
     }
 
+    /** Delete a beneficiary by its unique identifier. */
     public function delete(DomainId $domainId): void
     {
         $model = $this->beneficiaryModel->newQuery()->find($domainId->value);

@@ -9,11 +9,11 @@ use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Exceptions\BeneficiaryAlreadyExistsException;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
+use Copie\Shared\Application\CommandHandler;
 use Copie\Shared\Domain\Enums\Gender;
+use Copie\Shared\Domain\EventDispatcherInterface;
 
 /**
  * Handler for creating a new beneficiary.
@@ -24,15 +24,22 @@ use Copie\Shared\Domain\Enums\Gender;
  * 3. SpecificAttributes are resolved based on beneficiary type
  * 4. Beneficiary is created with all required fields
  */
-class CreateBeneficiaryHandler
+class CreateBeneficiaryHandler extends CommandHandler
 {
     public function __construct(
         private readonly BeneficiaryRepositoryInterface $beneficiaryRepository,
-    ) {}
+        EventDispatcherInterface $eventDispatcher,
+    ) {
+        parent::__construct($eventDispatcher);
+    }
 
+    /**
+     * Handle the command to create a new beneficiary.
+     *
+     * @throws BeneficiaryAlreadyExistsException If NIK already exists
+     */
     public function handle(CreateBeneficiaryCommand $createBeneficiaryCommand): Beneficiary
     {
-        // 1. Check if NIK already exists
         $nationalIdentityNumber = new NationalIdentityNumber($createBeneficiaryCommand->nik);
         $existing = $this->beneficiaryRepository->findByNik($nationalIdentityNumber);
 
@@ -40,20 +47,14 @@ class CreateBeneficiaryHandler
             throw BeneficiaryAlreadyExistsException::forNik($createBeneficiaryCommand->nik);
         }
 
-        // 2. Create FamilyCard
         $familyCard = FamilyCard::create(
             number: $createBeneficiaryCommand->familyCardNumber,
             headOfFamilyName: $createBeneficiaryCommand->headOfFamilyName,
         );
 
-        // 3. Resolve SpecificAttributes based on type
         $beneficiaryType = BeneficiaryType::from($createBeneficiaryCommand->type);
-        $specificAttributes = $this->resolveSpecificAttributes(
-            $beneficiaryType,
-            $createBeneficiaryCommand->specificAttributes,
-        );
+        $specificAttributes = $beneficiaryType->createAttributesFrom($createBeneficiaryCommand->specificAttributes);
 
-        // 4. Create Beneficiary
         $beneficiary = Beneficiary::create(
             nationalIdentityNumber: $nationalIdentityNumber,
             beneficiaryType: $beneficiaryType,
@@ -69,26 +70,9 @@ class CreateBeneficiaryHandler
             specificAttributes: $specificAttributes,
         );
 
-        // 5. Save
         $this->beneficiaryRepository->save($beneficiary);
+        $this->dispatchEvents($beneficiary);
 
         return $beneficiary;
-    }
-
-    /**
-     * Resolve SpecificAttributes from raw array based on beneficiary type.
-     *
-     * @param  array<string, mixed>|null  $data
-     */
-    private function resolveSpecificAttributes(BeneficiaryType $beneficiaryType, ?array $data): ?SpecificAttributes
-    {
-        if ($data === null) {
-            return null;
-        }
-
-        return match ($beneficiaryType) {
-            BeneficiaryType::CHILD => ChildAttributes::fromArray($data),
-            default => null,
-        };
     }
 }

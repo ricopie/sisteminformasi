@@ -11,23 +11,25 @@ use Copie\Contexts\Beneficiary\Infrastructure\Laravel\EloquentBeneficiaryReposit
 use Copie\Contexts\Beneficiary\Infrastructure\Laravel\Queries\EloquentBeneficiaryQuery;
 use Illuminate\Support\ServiceProvider;
 
+/** Service provider for Beneficiary context. */
 class BeneficiaryServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Write side — Repository
         $this->app->bind(
             BeneficiaryRepositoryInterface::class,
             fn (): EloquentBeneficiaryRepository => new EloquentBeneficiaryRepository(new BeneficiaryModel)
         );
 
-        // Read side — Query
         $this->app->bind(
             BeneficiaryQueryInterface::class,
             fn (): EloquentBeneficiaryQuery => new EloquentBeneficiaryQuery(new BeneficiaryModel)
         );
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../Migrations');

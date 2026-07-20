@@ -6,9 +6,7 @@ namespace Copie\Contexts\Beneficiary\Application\Command;
 
 use Copie\Shared\Application\DTO;
 
-/**
- * Command to create a new beneficiary.
- */
+/** Command to create a new beneficiary. */
 final class CreateBeneficiaryCommand extends DTO
 {
     public function __construct(
@@ -25,6 +23,7 @@ final class CreateBeneficiaryCommand extends DTO
         public readonly ?array $specificAttributes,
     ) {}
 
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): static
     {
         return new self(
@@ -42,6 +41,7 @@ final class CreateBeneficiaryCommand extends DTO
         );
     }
 
+    /** @return array<string, mixed> */
     public function toArray(): array
     {
         return [

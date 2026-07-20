@@ -12,7 +12,6 @@ use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryCreated;
 use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryDeleted;
 use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryUpdated;
 use Copie\Contexts\Beneficiary\Domain\Exceptions\BeneficiaryAttributeException;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
@@ -25,20 +24,11 @@ use DateTimeImmutable;
 /**
  * Beneficiary Aggregate Root.
  *
- * Represents a beneficiary (klien/penerima manfaat) in the system.
+ * Represents a beneficiary in the system.
  * This is the only entry point for managing beneficiary data.
  */
 class Beneficiary extends AggregateRoot
 {
-    /**
-     * Maps beneficiary types to their required SpecificAttributes implementation.
-     *
-     * @var array<string, class-string<SpecificAttributes>>
-     */
-    private const TYPE_ATTRIBUTE_MAP = [
-        BeneficiaryType::CHILD->value => ChildAttributes::class,
-    ];
-
     private NationalIdentityNumber $nationalIdentityNumber;
 
     private BeneficiaryType $beneficiaryType;
@@ -73,6 +63,8 @@ class Beneficiary extends AggregateRoot
      * Business rules enforced:
      * 1. If type has a mapped attribute class, specificAttributes must be provided
      * 2. If type has no mapped attribute class, specificAttributes must be null
+     *
+     * @throws BeneficiaryAttributeException When attribute validation fails
      */
     public static function create(
         NationalIdentityNumber $nationalIdentityNumber,
@@ -85,7 +77,7 @@ class Beneficiary extends AggregateRoot
         FamilyCard $familyCard,
         ?SpecificAttributes $specificAttributes = null,
     ): self {
-        $attributeClass = self::TYPE_ATTRIBUTE_MAP[$beneficiaryType->value] ?? null;
+        $attributeClass = $beneficiaryType->attributeClass();
 
         if ($attributeClass !== null && ! $specificAttributes instanceof $attributeClass) {
             throw BeneficiaryAttributeException::missingAttributes($beneficiaryType);
@@ -116,9 +108,7 @@ class Beneficiary extends AggregateRoot
         return $entity;
     }
 
-    /**
-     * Reconstitute a Beneficiary from persistent storage.
-     */
+    /** Reconstitute a Beneficiary from persistent storage. */
     public static function reconstitute(
         DomainId $domainId,
         DateTimeImmutable $createdAt,
@@ -211,9 +201,7 @@ class Beneficiary extends AggregateRoot
 
     // ─── Business Methods ─────────────────────────────────────
 
-    /**
-     * Update the beneficiary's names.
-     */
+    /** Update the beneficiary's names. */
     public function rename(Name $name, ?string $nickName): void
     {
         $this->name = $name;
@@ -222,9 +210,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Update birth place and date.
-     */
+    /** Update birth place and date. */
     public function updateBirthInfo(string $birthPlace, string $birthDate): void
     {
         $this->birthPlace = $birthPlace;
@@ -233,9 +219,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Change the beneficiary's gender.
-     */
+    /** Change the beneficiary's gender. */
     public function changeGender(Gender $gender): void
     {
         $this->gender = $gender;
@@ -243,9 +227,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Assign this beneficiary to a different family card.
-     */
+    /** Assign this beneficiary to a different family card. */
     public function assignToFamilyCard(FamilyCard $familyCard): void
     {
         $this->familyCard = $familyCard;
@@ -253,9 +235,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Replace the specific attributes for this beneficiary.
-     */
+    /** Replace the specific attributes for this beneficiary. */
     public function updateSpecificAttributes(?SpecificAttributes $specificAttributes): void
     {
         $this->specificAttributes = $specificAttributes;
@@ -263,9 +243,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Change the active status.
-     */
+    /** Change the active status. */
     public function changeActiveStatus(bool $isActive): void
     {
         $this->isActive = $isActive;
@@ -273,9 +251,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Add a guardian to this beneficiary.
-     */
+    /** Add a guardian to this beneficiary. */
     public function addGuardian(Person $person, GuardianRelationship $guardianRelationship): Guardian
     {
         $guardian = Guardian::create(
@@ -291,9 +267,7 @@ class Beneficiary extends AggregateRoot
         return $guardian;
     }
 
-    /**
-     * Remove a guardian from this beneficiary by ID.
-     */
+    /** Remove a guardian from this beneficiary by ID. */
     public function removeGuardian(DomainId $domainId): void
     {
         $this->guardians = array_values(
@@ -307,9 +281,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Remove all guardians from this beneficiary.
-     */
+    /** Remove all guardians from this beneficiary. */
     public function removeAllGuardians(): void
     {
         $this->guardians = [];
@@ -317,9 +289,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryUpdated(beneficiaryId: $this->id()));
     }
 
-    /**
-     * Mark beneficiary as deleted.
-     */
+    /** Soft-delete this beneficiary. */
     public function markAsDeleted(): void
     {
         $this->isActive = false;
@@ -327,6 +297,7 @@ class Beneficiary extends AggregateRoot
         $this->recordDomainEvent(new BeneficiaryDeleted(beneficiaryId: $this->id()));
     }
 
+    /** @return array<string, mixed> */
     public function toArray(): array
     {
         return [

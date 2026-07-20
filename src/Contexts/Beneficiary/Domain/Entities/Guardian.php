@@ -29,6 +29,7 @@ final class Guardian extends BaseEntity
         parent::__construct();
     }
 
+    /** Create a new Guardian. */
     public static function create(
         DomainId $domainId,
         Person $person,
@@ -42,6 +43,7 @@ final class Guardian extends BaseEntity
         return $entity;
     }
 
+    /** Reconstitute a Guardian from persistent storage. */
     public static function reconstitute(
         DomainId $id,
         DateTimeImmutable $createdAt,
@@ -58,6 +60,8 @@ final class Guardian extends BaseEntity
         return $guardian;
     }
 
+    // ─── Getters ──────────────────────────────────────────────
+
     public function beneficiaryId(): DomainId
     {
         return $this->domainId;
@@ -73,24 +77,30 @@ final class Guardian extends BaseEntity
         return $this->guardianRelationship;
     }
 
+    // ─── Business Methods ─────────────────────────────────────
+
+    /** Update the guardian's personal information. */
     public function updatePerson(Person $person): void
     {
         $this->person = $person;
         $this->updateTimestamp();
     }
 
+    /** Change the relationship type. */
     public function changeRelationship(GuardianRelationship $guardianRelationship): void
     {
         $this->guardianRelationship = $guardianRelationship;
         $this->updateTimestamp();
     }
 
+    /** Transfer this guardian to a different beneficiary. */
     public function transferTo(DomainId $domainId): void
     {
         $this->domainId = $domainId;
         $this->updateTimestamp();
     }
 
+    /** Serialize to array. */
     public function toArray(): array
     {
         return [

@@ -9,7 +9,6 @@ use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Entities\Guardian;
 use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Enums\GuardianRelationship;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
@@ -32,27 +31,23 @@ use Spatie\LaravelCipherSweet\Contracts\CipherSweetEncrypted;
  * This model belongs to the Infrastructure layer and is responsible
  * for mapping the Beneficiary aggregate to/from the database.
  *
- * CipherSweet encrypts PII fields:
- *  - High: nik, first_name, last_name, family_card_number, family_card_head_of_family_name
- *  - Medium: birth_place, birth_date, family_card_address
- *  - Low: type, gender — not encrypted
- *
  * @property Carbon $created_at
  * @property Carbon|null $updated_at
+ * @property string $id
  * @property string $nik
  * @property string $nik_blind_index
- * @property string $type
+ * @property BeneficiaryType $type
  * @property string $first_name
  * @property string $last_name
  * @property string|null $nick_name
  * @property string $birth_place
  * @property string $birth_date
- * @property string $gender
+ * @property Gender $gender
  * @property bool $is_active
  * @property string $family_card_number
  * @property string $family_card_head_of_family_name
  * @property array|null $family_card_address
- * @property array|null $specific_attributes
+ * @property SpecificAttributes|array|null $specific_attributes
  * @property array|null $guardians
  */
 class BeneficiaryModel extends Model implements CipherSweetEncrypted
@@ -90,13 +85,18 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
         'updated_at',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'specific_attributes' => BeneficiaryAttributesCast::class,
-        'guardians' => 'array',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'type' => BeneficiaryType::class,
+            'gender' => Gender::class,
+            'is_active' => 'boolean',
+            'specific_attributes' => BeneficiaryAttributesCast::class,
+            'guardians' => 'array',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     /**
      * Define which columns are encrypted by CipherSweet.
@@ -122,7 +122,6 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
      */
     public function toDomainEntity(): Beneficiary
     {
-        // Reconstitute FamilyCard
         $familyCard = FamilyCard::reconstitute(
             domainId: DomainId::fromString($this->id),
             createdAt: $this->created_at->toDateTimeImmutable(),
@@ -134,7 +133,6 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
                 : null,
         );
 
-        // Reconstitute Guardians
         $guardians = array_map(
             fn (array $gData): Guardian => Guardian::reconstitute(
                 id: DomainId::fromString($gData['id']),
@@ -149,13 +147,12 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             $this->guardians ?? [],
         );
 
-        // Reconstitute Beneficiary
         return Beneficiary::reconstitute(
             domainId: DomainId::fromString($this->id),
             createdAt: $this->created_at->toDateTimeImmutable(),
             updatedAt: $this->updated_at?->toDateTimeImmutable(),
             nationalIdentityNumber: new NationalIdentityNumber($this->nik),
-            beneficiaryType: BeneficiaryType::from($this->type),
+            beneficiaryType: $this->type,
             name: new Name(
                 firstName: $this->first_name,
                 lastName: $this->last_name,
@@ -163,10 +160,10 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             nickName: $this->nick_name,
             birthPlace: $this->birth_place,
             birthDate: $this->birth_date,
-            gender: Gender::from($this->gender),
+            gender: $this->gender,
             familyCard: $familyCard,
             isActive: $this->is_active,
-            specificAttributes: $this->buildSpecificAttributes(),
+            specificAttributes: $this->specific_attributes,
             guardians: $guardians,
         );
     }
@@ -176,7 +173,6 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
      */
     public static function fromDomainEntity(Beneficiary $beneficiary): self
     {
-        // Serialize guardians to JSON-compatible array
         $guardiansData = array_map(
             fn (Guardian $guardian): array => [
                 'id' => $guardian->id()->value,
@@ -193,15 +189,14 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
         $model->id = $beneficiary->id()->value;
         $model->nik = $beneficiary->nik()->value;
         $model->nik_blind_index = ''; // Will be computed by CipherSweet
-        $model->type = $beneficiary->type()->value;
+        $model->type = $beneficiary->type();
         $model->first_name = $beneficiary->name()->firstName;
         $model->last_name = $beneficiary->name()->lastName;
         $model->nick_name = $beneficiary->nickName();
         $model->birth_place = $beneficiary->birthPlace();
         $model->birth_date = $beneficiary->birthDate();
-        $model->gender = $beneficiary->gender()->value;
+        $model->gender = $beneficiary->gender();
 
-        // Family card data
         $model->family_card_number = $beneficiary->familyCard()->number();
         $model->family_card_head_of_family_name = $beneficiary->familyCard()->headOfFamilyName();
         $model->family_card_address = $beneficiary->familyCard()->address()?->toArray();
@@ -211,16 +206,5 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
         $model->guardians = $guardiansData === [] ? null : $guardiansData;
 
         return $model;
-    }
-
-    private function buildSpecificAttributes(): ?SpecificAttributes
-    {
-        if ($this->specific_attributes === null) {
-            return null;
-        }
-
-        // Determine which SpecificAttributes implementation to use
-        // For now, only ChildAttributes exists. Extend as new types are added.
-        return ChildAttributes::fromArray($this->specific_attributes);
     }
 }

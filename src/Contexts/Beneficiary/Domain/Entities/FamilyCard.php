@@ -29,6 +29,7 @@ final class FamilyCard extends BaseEntity
         parent::__construct();
     }
 
+    /** Create a new FamilyCard. */
     public static function create(
         string $number,
         string $headOfFamilyName,
@@ -42,6 +43,7 @@ final class FamilyCard extends BaseEntity
         return $entity;
     }
 
+    /** Reconstitute a FamilyCard from persistent storage. */
     public static function reconstitute(
         DomainId $domainId,
         DateTimeImmutable $createdAt,
@@ -58,27 +60,40 @@ final class FamilyCard extends BaseEntity
         return $familyCard;
     }
 
+    // ─── Getters ──────────────────────────────────────────────
+
+    /** Return the card number. */
     public function number(): string
     {
         return $this->number;
     }
 
+    /** Return the head of family name. */
     public function headOfFamilyName(): string
     {
         return $this->headOfFamilyName;
     }
 
+    /** Return the family address, or null if not set. */
     public function address(): ?Address
     {
         return $this->address;
     }
 
+    // ─── Business Methods ─────────────────────────────────────
+
+    /** Update the family address. */
     public function updateAddress(Address $address): void
     {
         $this->address = $address;
         $this->updateTimestamp();
     }
 
+    /**
+     * Change the head of family name.
+     *
+     * @throws InvalidArgumentException If name is empty after trimming.
+     */
     public function changeHeadOfFamily(string $name): void
     {
         $name = trim($name);
@@ -91,6 +106,7 @@ final class FamilyCard extends BaseEntity
         $this->updateTimestamp();
     }
 
+    /** Serialize to array. */
     public function toArray(): array
     {
         return [

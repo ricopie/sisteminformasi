@@ -8,10 +8,11 @@ use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
+use Copie\Contexts\Beneficiary\Domain\Enums\GuardianRelationship;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
-use Copie\Contexts\Beneficiary\Domain\ValueObjects\SpecificAttributes;
+use Copie\Shared\Application\CommandHandler;
 use Copie\Shared\Domain\Enums\Gender;
+use Copie\Shared\Domain\EventDispatcherInterface;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use Copie\Shared\Domain\ValueObjects\Person;
 use RuntimeException;
@@ -22,12 +23,23 @@ use RuntimeException;
  * Supports partial updates — only provided fields are changed.
  * Guardians and specificAttributes are fully replaced when provided.
  */
-class UpdateBeneficiaryHandler
+class UpdateBeneficiaryHandler extends CommandHandler
 {
     public function __construct(
         private readonly BeneficiaryRepositoryInterface $beneficiaryRepository,
-    ) {}
+        EventDispatcherInterface $eventDispatcher,
+    ) {
+        parent::__construct($eventDispatcher);
+    }
 
+    /**
+     * Handle the command to update an existing beneficiary.
+     *
+     * Supports partial updates — only provided fields are changed.
+     *
+     *
+     * @throws RuntimeException If beneficiary not found
+     */
     public function handle(UpdateBeneficiaryCommand $updateBeneficiaryCommand): void
     {
         $domainId = new DomainId($updateBeneficiaryCommand->id);
@@ -77,7 +89,7 @@ class UpdateBeneficiaryHandler
             $type = $updateBeneficiaryCommand->type !== null
                 ? BeneficiaryType::from($updateBeneficiaryCommand->type)
                 : $beneficiary->type();
-            $specificAttributes = $this->resolveSpecificAttributes($type, $updateBeneficiaryCommand->specificAttributes);
+            $specificAttributes = $type->createAttributesFrom($updateBeneficiaryCommand->specificAttributes);
             $beneficiary->updateSpecificAttributes($specificAttributes);
         }
 
@@ -88,7 +100,7 @@ class UpdateBeneficiaryHandler
             foreach ($updateBeneficiaryCommand->guardians as $guardianData) {
                 $beneficiary->addGuardian(
                     person: Person::fromArray($guardianData['person'] ?? []),
-                    guardianRelationship: $guardianData['relationship'] ?? 'other',
+                    guardianRelationship: GuardianRelationship::from($guardianData['relationship'] ?? 'other'),
                 );
             }
         }
@@ -99,16 +111,6 @@ class UpdateBeneficiaryHandler
         }
 
         $this->beneficiaryRepository->save($beneficiary);
-    }
-
-    /**
-     * @param  array<string, mixed>  $data
-     */
-    private function resolveSpecificAttributes(BeneficiaryType $beneficiaryType, array $data): ?SpecificAttributes
-    {
-        return match ($beneficiaryType) {
-            BeneficiaryType::CHILD => ChildAttributes::fromArray($data),
-            default => null,
-        };
+        $this->dispatchEvents($beneficiary);
     }
 }

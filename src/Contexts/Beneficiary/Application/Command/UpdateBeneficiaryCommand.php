@@ -30,6 +30,7 @@ final class UpdateBeneficiaryCommand extends DTO
         public readonly ?bool $isActive = null,
     ) {}
 
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): static
     {
         return new self(
@@ -49,6 +50,7 @@ final class UpdateBeneficiaryCommand extends DTO
         );
     }
 
+    /** @return array<string, mixed> */
     public function toArray(): array
     {
         return [

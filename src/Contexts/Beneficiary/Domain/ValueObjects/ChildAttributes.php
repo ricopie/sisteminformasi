@@ -15,9 +15,7 @@ final readonly class ChildAttributes implements SpecificAttributes
         public Education $education,
         public array $educationHistory = [],
         public array $hobbies = [],
-    ) {
-        // No need for manual type validation — PHP handles it
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {
