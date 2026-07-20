@@ -49,31 +49,49 @@ abstract class BaseEntity
         return $static;
     }
 
+    /**
+     * Return the unique identifier for this entity.
+     */
     public function id(): DomainId
     {
         return $this->domainId;
     }
 
+    /**
+     * Return the creation timestamp.
+     */
     public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
+    /**
+     * Return the last update timestamp, or null if never updated.
+     */
     public function updatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
+    /**
+     * Mark this entity as updated.
+     */
     protected function updateTimestamp(): void
     {
         $this->updatedAt = new DateTimeImmutable;
     }
 
+    /**
+     * Two entities are equal if they share the same ID and class.
+     */
     public function equals(self $other): bool
     {
         return $this->domainId->equals($other->id())
             && static::class === $other::class;
     }
 
+    /**
+     * Serialize entity to an array representation.
+     */
     abstract public function toArray(): array;
 }

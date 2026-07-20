@@ -9,6 +9,9 @@ abstract class AggregateRoot extends BaseEntity
     /** @var DomainEvent[] */
     private array $domainEvents = [];
 
+    /**
+     * Record a domain event to be dispatched after persistence.
+     */
     protected function recordDomainEvent(DomainEvent $domainEvent): void
     {
         $this->domainEvents[] = $domainEvent;

@@ -10,6 +10,11 @@ use Symfony\Component\Uid\Ulid;
 
 final readonly class DomainId implements Stringable
 {
+    /**
+     * Unique identifier value object backed by ULID.
+     *
+     * @throws InvalidIdentifierException
+     */
     public function __construct(public string $value)
     {
         if (! Ulid::isValid($value)) {
@@ -36,11 +41,17 @@ final readonly class DomainId implements Stringable
         return new self($value);
     }
 
+    /**
+     * Two DomainIds are equal if their string values match.
+     */
     public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }
 
+    /**
+     * Return the string representation of this identifier.
+     */
     public function __toString(): string
     {
         return $this->value;
