@@ -7,8 +7,8 @@ namespace Copie\Contexts\Beneficiary\Infrastructure\Laravel\Queries;
 use Copie\Contexts\Beneficiary\Application\BeneficiaryQueryInterface;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Infrastructure\Laravel\Eloquent\BeneficiaryModel;
+use Copie\Shared\Application\PaginatedResult;
 use Copie\Shared\Domain\ValueObjects\DomainId;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Eloquent implementation of BeneficiaryQueryInterface.
@@ -37,11 +37,10 @@ class EloquentBeneficiaryQuery implements BeneficiaryQueryInterface
 
     /**
      * @param  array<string, mixed>  $filters  Supported: 'type', 'search'
-     * @return LengthAwarePaginator<int, BeneficiaryModel>
      */
-    public function findAllPaginated(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    public function findAllPaginated(array $filters = [], int $perPage = 15): PaginatedResult
     {
-        return $this->beneficiaryModel->newQuery()
+        $lengthAwarePaginator = $this->beneficiaryModel->newQuery()
             ->when(
                 $filters['type'] ?? null,
                 fn ($query, string $type): mixed => $query->where('type', $type),
@@ -56,5 +55,13 @@ class EloquentBeneficiaryQuery implements BeneficiaryQueryInterface
             )
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
+
+        return new PaginatedResult(
+            items: $lengthAwarePaginator->items(),
+            total: $lengthAwarePaginator->total(),
+            perPage: $lengthAwarePaginator->perPage(),
+            currentPage: $lengthAwarePaginator->currentPage(),
+            lastPage: $lengthAwarePaginator->lastPage(),
+        );
     }
 }

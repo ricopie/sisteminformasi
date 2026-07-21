@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Copie\Contexts\Beneficiary\Application\Query;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryQueryInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Copie\Shared\Application\PaginatedResult;
 
 /**
  * Handler for listing beneficiaries.
@@ -19,7 +19,7 @@ class ListBeneficiariesHandler
     ) {
     }
 
-    public function handle(ListBeneficiariesQuery $listBeneficiariesQuery): LengthAwarePaginator
+    public function handle(ListBeneficiariesQuery $listBeneficiariesQuery): PaginatedResult
     {
         return $this->beneficiaryQuery->findAllPaginated(
             filters: $listBeneficiariesQuery->filters,

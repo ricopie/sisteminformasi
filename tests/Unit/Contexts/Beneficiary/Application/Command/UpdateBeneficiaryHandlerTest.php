@@ -18,11 +18,11 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\Enums\Gender;
 use Copie\Shared\Domain\EventDispatcherInterface;
+use Copie\Shared\Domain\Exceptions\EntityNotFoundException;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class UpdateBeneficiaryHandlerTest extends TestCase
 {
@@ -57,7 +57,7 @@ class UpdateBeneficiaryHandlerTest extends TestCase
         $validId = DomainId::generate()->value;
         $updateBeneficiaryCommand = UpdateBeneficiaryCommand::fromArray(['id' => $validId]);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(EntityNotFoundException::class);
         $this->updateBeneficiaryHandler->handle($updateBeneficiaryCommand);
     }
 

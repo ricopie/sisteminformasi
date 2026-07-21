@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Copie\Contexts\Beneficiary\Application;
 
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
+use Copie\Shared\Application\PaginatedResult;
 use Copie\Shared\Domain\ValueObjects\DomainId;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Query interface for reading beneficiary data (CQRS read side).
@@ -25,7 +25,6 @@ interface BeneficiaryQueryInterface
      * Find beneficiaries with optional filters and pagination.
      *
      * @param  array<string, mixed>  $filters  Supported: 'type', 'search'
-     * @return LengthAwarePaginator<int, mixed>
      */
-    public function findAllPaginated(array $filters = [], int $perPage = 15): LengthAwarePaginator;
+    public function findAllPaginated(array $filters = [], int $perPage = 15): PaginatedResult;
 }

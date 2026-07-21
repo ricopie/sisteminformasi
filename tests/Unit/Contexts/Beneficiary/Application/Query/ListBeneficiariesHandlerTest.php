@@ -7,7 +7,7 @@ namespace Tests\Unit\Contexts\Beneficiary\Application\Query;
 use Copie\Contexts\Beneficiary\Application\BeneficiaryQueryInterface;
 use Copie\Contexts\Beneficiary\Application\Query\ListBeneficiariesHandler;
 use Copie\Contexts\Beneficiary\Application\Query\ListBeneficiariesQuery;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Copie\Shared\Application\PaginatedResult;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,17 +31,17 @@ class ListBeneficiariesHandlerTest extends TestCase
     #[Test]
     public function test_handle_returns_paginator(): void
     {
-        $paginator = $this->createStub(LengthAwarePaginator::class);
+        $paginatedResult = new PaginatedResult(items: [], total: 0, perPage: 15, currentPage: 1, lastPage: 1);
 
         $this->beneficiaryQuery
             ->expects($this->once())
             ->method('findAllPaginated')
-            ->willReturn($paginator);
+            ->willReturn($paginatedResult);
 
         $listBeneficiariesQuery = new ListBeneficiariesQuery([], 15);
         $result = $this->listBeneficiariesHandler->handle($listBeneficiariesQuery);
 
-        $this->assertSame($paginator, $result);
+        $this->assertSame($paginatedResult, $result);
     }
 
     #[Test]
@@ -52,10 +52,10 @@ class ListBeneficiariesHandlerTest extends TestCase
         $this->beneficiaryQuery
             ->expects($this->exactly(1))
             ->method('findAllPaginated')
-            ->willReturnCallback(function (array $filters, int $perPage) use (&$capturedArgs): MockObject {
+            ->willReturnCallback(function (array $filters, int $perPage) use (&$capturedArgs): PaginatedResult {
                 $capturedArgs = [$filters, $perPage];
 
-                return $this->createMock(LengthAwarePaginator::class);
+                return new PaginatedResult(items: [], total: 0, perPage: 15, currentPage: 1, lastPage: 1);
             });
 
         $listBeneficiariesQuery = new ListBeneficiariesQuery();
@@ -73,10 +73,10 @@ class ListBeneficiariesHandlerTest extends TestCase
         $this->beneficiaryQuery
             ->expects($this->exactly(1))
             ->method('findAllPaginated')
-            ->willReturnCallback(function (array $filters, int $perPage) use (&$capturedArgs): MockObject {
+            ->willReturnCallback(function (array $filters, int $perPage) use (&$capturedArgs): PaginatedResult {
                 $capturedArgs = [$filters, $perPage];
 
-                return $this->createMock(LengthAwarePaginator::class);
+                return new PaginatedResult(items: [], total: 0, perPage: 10, currentPage: 1, lastPage: 1);
             });
 
         $listBeneficiariesQuery = new ListBeneficiariesQuery(['type' => 'child'], 10);

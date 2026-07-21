@@ -13,9 +13,9 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
 use Copie\Shared\Application\CommandHandler;
 use Copie\Shared\Domain\Enums\Gender;
 use Copie\Shared\Domain\EventDispatcherInterface;
+use Copie\Shared\Domain\Exceptions\EntityNotFoundException;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use Copie\Shared\Domain\ValueObjects\Person;
-use RuntimeException;
 
 /**
  * Handler for updating an existing beneficiary.
@@ -37,8 +37,7 @@ class UpdateBeneficiaryHandler extends CommandHandler
      *
      * Supports partial updates — only provided fields are changed.
      *
-     *
-     * @throws RuntimeException If beneficiary not found
+     * @throws EntityNotFoundException If beneficiary not found
      */
     public function handle(UpdateBeneficiaryCommand $updateBeneficiaryCommand): void
     {
@@ -46,7 +45,7 @@ class UpdateBeneficiaryHandler extends CommandHandler
         $beneficiary = $this->beneficiaryRepository->findById($domainId);
 
         if (! $beneficiary instanceof Beneficiary) {
-            throw new RuntimeException(sprintf('Beneficiary with ID "%s" not found.', $updateBeneficiaryCommand->id));
+            throw EntityNotFoundException::for($updateBeneficiaryCommand->id, 'Beneficiary');
         }
 
         // Update name if provided

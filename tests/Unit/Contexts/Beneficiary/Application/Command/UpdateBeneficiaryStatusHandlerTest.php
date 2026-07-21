@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
@@ -16,11 +18,11 @@ use Copie\Contexts\Beneficiary\Domain\ValueObjects\NationalIdentityNumber;
 use Copie\Shared\Domain\Enums\EducationLevel;
 use Copie\Shared\Domain\Enums\Gender;
 use Copie\Shared\Domain\EventDispatcherInterface;
+use Copie\Shared\Domain\Exceptions\EntityNotFoundException;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class UpdateBeneficiaryStatusHandlerTest extends TestCase
 {
@@ -109,7 +111,7 @@ class UpdateBeneficiaryStatusHandlerTest extends TestCase
             isActive: false,
         );
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(EntityNotFoundException::class);
         $this->updateBeneficiaryStatusHandler->handle($updateBeneficiaryStatusCommand);
     }
 

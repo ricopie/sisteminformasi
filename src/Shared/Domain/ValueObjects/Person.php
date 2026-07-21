@@ -48,12 +48,6 @@ final class Person extends ValueObject
 
     protected function equalize(): array
     {
-        return [
-            $this->name,
-            $this->occupation,
-            $this->education,
-            $this->address,
-            $this->contact,
-        ];
+        return $this->toArray();
     }
 }
