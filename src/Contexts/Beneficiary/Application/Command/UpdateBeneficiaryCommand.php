@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Copie\Contexts\Beneficiary\Application\Command;
 
 use Copie\Shared\Application\DTO;
+use Copie\Shared\Domain\Attributes\NotBlank;
 
 /**
  * Command to update an existing beneficiary.
@@ -15,7 +16,7 @@ use Copie\Shared\Application\DTO;
 final class UpdateBeneficiaryCommand extends DTO
 {
     public function __construct(
-        public readonly string $id,
+        #[NotBlank] public readonly string $id,
         public readonly ?string $firstName = null,
         public readonly ?string $lastName = null,
         public readonly ?string $nickName = null,
@@ -34,7 +35,7 @@ final class UpdateBeneficiaryCommand extends DTO
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): static
     {
-        return new self(
+        $dto = new self(
             id: $data['id'],
             firstName: $data['firstName'] ?? null,
             lastName: $data['lastName'] ?? null,
@@ -49,6 +50,10 @@ final class UpdateBeneficiaryCommand extends DTO
             guardians: $data['guardians'] ?? null,
             isActive: $data['isActive'] ?? null,
         );
+
+        $dto->validate();
+
+        return $dto;
     }
 
     /** @return array<string, mixed> */

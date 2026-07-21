@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\Command\CreateBeneficiaryCommand;
+use Copie\Shared\Domain\Validator\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +62,186 @@ class CreateBeneficiaryCommandTest extends TestCase
 
         $this->assertNull($createBeneficiaryCommand->nickName);
         $this->assertNull($createBeneficiaryCommand->specificAttributes);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_nik_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_type_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => '',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_first_name_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => '',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_last_name_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => '',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_birth_place_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => '',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_birth_date_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_gender_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => '',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_family_card_number_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '',
+            'headOfFamilyName' => 'Family Head',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_head_of_family_name_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = [
+            'nik' => '1234567890',
+            'type' => 'INDIVIDUAL',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthPlace' => 'Jakarta',
+            'birthDate' => '1990-01-01',
+            'gender' => 'MALE',
+            'familyCardNumber' => '12345678',
+            'headOfFamilyName' => '',
+        ];
+
+        CreateBeneficiaryCommand::fromArray($data);
     }
 
     #[Test]

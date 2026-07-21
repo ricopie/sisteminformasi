@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\Command\UpdateBeneficiaryStatusCommand;
+use Copie\Shared\Domain\Validator\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +30,16 @@ class UpdateBeneficiaryStatusCommandTest extends TestCase
         $updateBeneficiaryStatusCommand = UpdateBeneficiaryStatusCommand::fromArray($data);
 
         $this->assertTrue($updateBeneficiaryStatusCommand->isActive);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_id_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = ['id' => '', 'isActive' => true];
+
+        UpdateBeneficiaryStatusCommand::fromArray($data);
     }
 
     #[Test]

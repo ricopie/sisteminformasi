@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
 
 use Copie\Contexts\Beneficiary\Application\Command\DeleteBeneficiaryCommand;
+use Copie\Shared\Domain\Validator\ValidationException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +19,16 @@ class DeleteBeneficiaryCommandTest extends TestCase
         $deleteBeneficiaryCommand = DeleteBeneficiaryCommand::fromArray($data);
 
         $this->assertSame($data['id'], $deleteBeneficiaryCommand->id);
+    }
+
+    #[Test]
+    public function test_from_array_throws_validation_exception_when_id_is_empty(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $data = ['id' => ''];
+
+        DeleteBeneficiaryCommand::fromArray($data);
     }
 
     #[Test]
