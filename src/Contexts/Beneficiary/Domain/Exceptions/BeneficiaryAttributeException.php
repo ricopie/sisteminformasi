@@ -16,8 +16,7 @@ final class BeneficiaryAttributeException extends DomainException
     {
         return new self(match ($beneficiaryType) {
             BeneficiaryType::CHILD => 'Child beneficiaries must have child attribute data.',
-            BeneficiaryType::ELDERLY => 'Elderly beneficiaries must have elderly attribute data.',
-            BeneficiaryType::DISABLED => 'Disability beneficiaries must have disability attribute data.',
+            default => sprintf('Attribute data is required for %s type.', $beneficiaryType->value),
         });
     }
 

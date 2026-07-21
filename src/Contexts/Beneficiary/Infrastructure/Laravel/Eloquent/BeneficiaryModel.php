@@ -122,10 +122,7 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
      */
     public function toDomainEntity(): Beneficiary
     {
-        $familyCard = FamilyCard::reconstitute(
-            domainId: DomainId::fromString($this->id),
-            createdAt: $this->created_at->toDateTimeImmutable(),
-            updatedAt: $this->updated_at?->toDateTimeImmutable(),
+        $familyCard = FamilyCard::create(
             number: $this->family_card_number,
             headOfFamilyName: $this->family_card_head_of_family_name,
             address: isset($this->family_card_address)
