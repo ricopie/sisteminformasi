@@ -18,7 +18,7 @@ use DateTimeImmutable;
  */
 final class Guardian extends BaseEntity
 {
-    private DomainId $domainId;
+    private DomainId $beneficiaryId;
 
     private Person $person;
 
@@ -36,7 +36,7 @@ final class Guardian extends BaseEntity
         GuardianRelationship $guardianRelationship,
     ): self {
         $entity = new self();
-        $entity->domainId = $domainId;
+        $entity->beneficiaryId = $domainId;
         $entity->person = $person;
         $entity->guardianRelationship = $guardianRelationship;
 
@@ -53,7 +53,7 @@ final class Guardian extends BaseEntity
         GuardianRelationship $guardianRelationship,
     ): self {
         $guardian = self::fromPersistence($id, $createdAt, $updatedAt);
-        $guardian->domainId = $beneficiaryId;
+        $guardian->beneficiaryId = $beneficiaryId;
         $guardian->person = $person;
         $guardian->guardianRelationship = $guardianRelationship;
 
@@ -64,7 +64,7 @@ final class Guardian extends BaseEntity
 
     public function beneficiaryId(): DomainId
     {
-        return $this->domainId;
+        return $this->beneficiaryId;
     }
 
     public function person(): Person
@@ -96,7 +96,7 @@ final class Guardian extends BaseEntity
     /** Transfer this guardian to a different beneficiary. */
     public function transferTo(DomainId $domainId): void
     {
-        $this->domainId = $domainId;
+        $this->beneficiaryId = $domainId;
         $this->updateTimestamp();
     }
 
@@ -105,7 +105,7 @@ final class Guardian extends BaseEntity
     {
         return [
             'id' => $this->id()->value,
-            'beneficiary_id' => $this->domainId->value,
+            'beneficiary_id' => $this->beneficiaryId->value,
             'person' => $this->person->toArray(),
             'relationship' => $this->guardianRelationship->value,
         ];

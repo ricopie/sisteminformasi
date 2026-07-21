@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Copie\Contexts\Beneficiary\Infrastructure\Laravel\Queries;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryQueryInterface;
+use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Infrastructure\Laravel\Eloquent\BeneficiaryModel;
+use Copie\Shared\Domain\ValueObjects\DomainId;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -19,6 +21,18 @@ class EloquentBeneficiaryQuery implements BeneficiaryQueryInterface
     public function __construct(
         private readonly BeneficiaryModel $beneficiaryModel,
     ) {
+    }
+
+    /** Find a beneficiary by its unique identifier. */
+    public function findById(DomainId $domainId): ?Beneficiary
+    {
+        $model = $this->beneficiaryModel->newQuery()->find($domainId->value);
+
+        if ($model === null) {
+            return null;
+        }
+
+        return $model->toDomainEntity();
     }
 
     /**

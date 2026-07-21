@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Copie\Contexts\Beneficiary\Application;
 
+use Copie\Contexts\Beneficiary\Domain\Beneficiary;
+use Copie\Shared\Domain\ValueObjects\DomainId;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -14,6 +16,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface BeneficiaryQueryInterface
 {
+    /**
+     * Find a beneficiary by its unique identifier.
+     */
+    public function findById(DomainId $domainId): ?Beneficiary;
+
     /**
      * Find beneficiaries with optional filters and pagination.
      *

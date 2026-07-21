@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Contexts\Beneficiary\Application\Query;
 
-use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
+use Copie\Contexts\Beneficiary\Application\BeneficiaryQueryInterface;
 use Copie\Contexts\Beneficiary\Application\Query\GetBeneficiaryHandler;
 use Copie\Contexts\Beneficiary\Application\Query\GetBeneficiaryQuery;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
@@ -25,17 +25,17 @@ use PHPUnit\Framework\TestCase;
 class GetBeneficiaryHandlerTest extends TestCase
 {
     /**
-     * @var MockObject&BeneficiaryRepositoryInterface
+     * @var MockObject&BeneficiaryQueryInterface
      */
-    private MockObject $beneficiaryRepository;
+    private MockObject $beneficiaryQuery;
 
     private GetBeneficiaryHandler $getBeneficiaryHandler;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->beneficiaryRepository = $this->createMock(BeneficiaryRepositoryInterface::class);
-        $this->getBeneficiaryHandler = new GetBeneficiaryHandler($this->beneficiaryRepository);
+        $this->beneficiaryQuery = $this->createMock(BeneficiaryQueryInterface::class);
+        $this->getBeneficiaryHandler = new GetBeneficiaryHandler($this->beneficiaryQuery);
     }
 
     #[Test]
@@ -44,7 +44,7 @@ class GetBeneficiaryHandlerTest extends TestCase
         $beneficiary = $this->createExistingBeneficiary();
         $domainId = DomainId::generate();
 
-        $this->beneficiaryRepository
+        $this->beneficiaryQuery
             ->expects($this->once())
             ->method('findById')
             ->with($domainId)
@@ -61,7 +61,7 @@ class GetBeneficiaryHandlerTest extends TestCase
     {
         $domainId = DomainId::generate();
 
-        $this->beneficiaryRepository
+        $this->beneficiaryQuery
             ->expects($this->once())
             ->method('findById')
             ->with($domainId)
@@ -74,12 +74,12 @@ class GetBeneficiaryHandlerTest extends TestCase
     }
 
     #[Test]
-    public function test_handle_delegates_to_repository_with_correct_id(): void
+    public function test_handle_delegates_to_query_with_correct_id(): void
     {
         $domainId = DomainId::generate();
         $getBeneficiaryQuery = new GetBeneficiaryQuery($domainId->value);
 
-        $this->beneficiaryRepository
+        $this->beneficiaryQuery
             ->expects($this->exactly(1))
             ->method('findById')
             ->with($domainId);
