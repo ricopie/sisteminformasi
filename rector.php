@@ -124,8 +124,8 @@ use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRect
 $domainApplicationPaths = [
     __DIR__.'/src/Shared/Domain',
     __DIR__.'/src/Shared/Application',
-    __DIR__.'/src/Contexts/*/Domain',
-    __DIR__.'/src/Contexts/*/Application',
+    ...glob(__DIR__.'/src/Contexts/*/Domain') ?: [],
+    ...glob(__DIR__.'/src/Contexts/*/Application') ?: [],
 ];
 
 $conservativePaths = [
