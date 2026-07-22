@@ -1,10 +1,12 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href="https://github.com/ricopie/sisteminformasi/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/ricopie/sisteminformasi/tests.yml?branch=feat/modules&label=tests" alt="Tests"></a>
+<a href="https://github.com/ricopie/sisteminformasi/actions/workflows/code-quality.yml"><img src="https://img.shields.io/github/actions/workflow/status/ricopie/sisteminformasi/code-quality.yml?branch=feat/modules&label=code%20quality" alt="Code Quality"></a>
+<a href="https://github.com/ricopie/sisteminformasi/actions/workflows/static-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/ricopie/sisteminformasi/static-analysis.yml?branch=feat/modules&label=static%20analysis" alt="Static Analysis"></a>
+<a href="https://packagist.org/packages/ricopie/sisteminformasi"><img src="https://img.shields.io/packagist/php-v/ricopie/sisteminformasi" alt="PHP Version"></a>
+<a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-12.x-red" alt="Laravel Version"></a>
+<a href="https://github.com/ricopie/sisteminformasi/blob/feat/modules/LICENSE"><img src="https://img.shields.io/github/license/ricopie/sisteminformasi" alt="License"></a>
 </p>
 
 ## About Laravel
