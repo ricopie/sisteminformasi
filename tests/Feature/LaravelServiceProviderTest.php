@@ -17,7 +17,7 @@ class LaravelServiceProviderTest extends TestCase
         /** @var LaravelServiceProvider $provider */
         $provider = app()->getProvider(LaravelServiceProvider::class);
 
-        $this->assertNotNull($provider, 'LaravelServiceProvider should be registered');
+        $this->assertInstanceOf(LaravelServiceProvider::class, $provider);
         $this->assertContains('Beneficiary', $provider->modules());
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
+namespace Tests\Unit\Contexts\Beneficiary\Application\Handler;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
 use Copie\Contexts\Beneficiary\Application\Command\CreateBeneficiaryCommand;
@@ -70,7 +70,6 @@ class CreateBeneficiaryHandlerTest extends TestCase
         $this->assertSame(Gender::MALE, $beneficiary->gender());
         $this->assertSame('320123456789001', $beneficiary->familyCard()->number());
         $this->assertSame('Santoso', $beneficiary->familyCard()->headOfFamilyName());
-
     }
 
     #[Test]
