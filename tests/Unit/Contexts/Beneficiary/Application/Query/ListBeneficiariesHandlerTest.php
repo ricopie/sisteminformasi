@@ -31,7 +31,7 @@ class ListBeneficiariesHandlerTest extends TestCase
     #[Test]
     public function test_handle_returns_paginator(): void
     {
-        $paginatedResult = new PaginatedResult(items: [], total: 0, perPage: 15, currentPage: 1, lastPage: 1);
+        $paginatedResult = new PaginatedResult([], 0, 15, 1, 1);
 
         $this->beneficiaryQuery
             ->expects($this->once())
