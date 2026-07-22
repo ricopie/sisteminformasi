@@ -36,8 +36,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
 
-      - name: Check formatting
+      - name: Check formatting (Laravel preset)
         run: vendor/bin/pint --test
+
+      - name: Check formatting (PSR-12 preset)
+        run: vendor/bin/pint --test --config=src/pint-psr12.json
 
       - name: Check architecture
         run: vendor/bin/deptrac analyse
