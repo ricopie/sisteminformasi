@@ -1,0 +1,31 @@
+deptrac:
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: src/Contexts/.*/Domain/.*
+        - type: directory
+          value: src/Shared/.*/Domain/.*
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Contexts/.*/Application/.*
+        - type: directory
+          value: src/Shared/.*/Application/.*
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Contexts/.*/Infrastructure/.*
+        - type: directory
+          value: src/Shared/.*/Infrastructure/.*
+
+  ruleset:
+    Domain:
+      - Domain
+    Application:
+      - Domain
+      - Application
+    Infrastructure:
+      - Domain
+      - Application
+      - Infrastructure

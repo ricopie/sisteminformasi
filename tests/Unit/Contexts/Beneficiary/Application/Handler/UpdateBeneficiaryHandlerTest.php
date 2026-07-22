@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
+namespace Tests\Unit\Contexts\Beneficiary\Application\Handler;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
 use Copie\Contexts\Beneficiary\Application\Command\UpdateBeneficiaryCommand;
-use Copie\Contexts\Beneficiary\Application\Command\UpdateBeneficiaryHandler;
+use Copie\Contexts\Beneficiary\Application\Handler\UpdateBeneficiaryHandler;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;

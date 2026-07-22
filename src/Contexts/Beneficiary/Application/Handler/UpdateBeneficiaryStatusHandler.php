@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Copie\Contexts\Beneficiary\Application\Command;
+namespace Copie\Contexts\Beneficiary\Application\Handler;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
+use Copie\Contexts\Beneficiary\Application\Command\UpdateBeneficiaryStatusCommand;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Shared\Application\CommandHandler;
 use Copie\Shared\Domain\EventDispatcherInterface;
@@ -12,9 +13,9 @@ use Copie\Shared\Domain\Exceptions\EntityNotFoundException;
 use Copie\Shared\Domain\ValueObjects\DomainId;
 
 /**
- * Handler for deleting (soft delete) a beneficiary.
+ * Handler for updating the active status of a beneficiary.
  */
-class DeleteBeneficiaryHandler extends CommandHandler
+class UpdateBeneficiaryStatusHandler extends CommandHandler
 {
     public function __construct(
         private readonly BeneficiaryRepositoryInterface $beneficiaryRepository,
@@ -24,21 +25,20 @@ class DeleteBeneficiaryHandler extends CommandHandler
     }
 
     /**
-     * Handle the command to delete (soft delete) a beneficiary.
-     *
+     * Handle the command to update active status.
      *
      * @throws EntityNotFoundException If beneficiary not found
      */
-    public function handle(DeleteBeneficiaryCommand $deleteBeneficiaryCommand): void
+    public function handle(UpdateBeneficiaryStatusCommand $updateBeneficiaryStatusCommand): void
     {
-        $domainId = new DomainId($deleteBeneficiaryCommand->id);
+        $domainId = new DomainId($updateBeneficiaryStatusCommand->id);
         $beneficiary = $this->beneficiaryRepository->findById($domainId);
 
         if (! $beneficiary instanceof Beneficiary) {
-            throw EntityNotFoundException::for($deleteBeneficiaryCommand->id, 'Beneficiary');
+            throw EntityNotFoundException::for($updateBeneficiaryStatusCommand->id, 'Beneficiary');
         }
 
-        $beneficiary->markAsDeleted();
+        $beneficiary->changeActiveStatus($updateBeneficiaryStatusCommand->isActive);
         $this->beneficiaryRepository->save($beneficiary);
         $this->dispatchEvents($beneficiary);
     }

@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Contexts\Beneficiary\Application\Command;
+namespace Tests\Unit\Contexts\Beneficiary\Application\Handler;
 
 use Copie\Contexts\Beneficiary\Application\BeneficiaryRepositoryInterface;
-use Copie\Contexts\Beneficiary\Application\Command\DeleteBeneficiaryCommand;
-use Copie\Contexts\Beneficiary\Application\Command\DeleteBeneficiaryHandler;
+use Copie\Contexts\Beneficiary\Application\Command\UpdateBeneficiaryStatusCommand;
+use Copie\Contexts\Beneficiary\Application\Handler\UpdateBeneficiaryStatusHandler;
 use Copie\Contexts\Beneficiary\Domain\Beneficiary;
 use Copie\Contexts\Beneficiary\Domain\Entities\FamilyCard;
 use Copie\Contexts\Beneficiary\Domain\Enums\BeneficiaryType;
 use Copie\Contexts\Beneficiary\Domain\Enums\EducationStatus;
-use Copie\Contexts\Beneficiary\Domain\Events\BeneficiaryDeleted;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\ChildAttributes;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Education;
 use Copie\Contexts\Beneficiary\Domain\ValueObjects\Name;
@@ -25,16 +24,19 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class DeleteBeneficiaryHandlerTest extends TestCase
+class UpdateBeneficiaryStatusHandlerTest extends TestCase
 {
     /**
      * @var MockObject&BeneficiaryRepositoryInterface
      */
     private MockObject $beneficiaryRepository;
 
+    /**
+     * @var MockObject&EventDispatcherInterface
+     */
     private MockObject $eventDispatcher;
 
-    private DeleteBeneficiaryHandler $deleteBeneficiaryHandler;
+    private UpdateBeneficiaryStatusHandler $updateBeneficiaryStatusHandler;
 
     private Beneficiary $existingBeneficiary;
 
@@ -43,12 +45,12 @@ class DeleteBeneficiaryHandlerTest extends TestCase
         parent::setUp();
         $this->beneficiaryRepository = $this->createMock(BeneficiaryRepositoryInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->deleteBeneficiaryHandler = new DeleteBeneficiaryHandler($this->beneficiaryRepository, $this->eventDispatcher);
+        $this->updateBeneficiaryStatusHandler = new UpdateBeneficiaryStatusHandler($this->beneficiaryRepository, $this->eventDispatcher);
         $this->existingBeneficiary = $this->createExistingBeneficiary();
     }
 
     #[Test]
-    public function test_handle_marks_beneficiary_as_inactive(): void
+    public function test_handle_deactivates_beneficiary(): void
     {
         $this->beneficiaryRepository
             ->expects($this->once())
@@ -60,11 +62,40 @@ class DeleteBeneficiaryHandlerTest extends TestCase
             ->method('save')
             ->with($this->existingBeneficiary);
 
-        $deleteBeneficiaryCommand = new DeleteBeneficiaryCommand(id: $this->existingBeneficiary->id()->value);
+        $updateBeneficiaryStatusCommand = new UpdateBeneficiaryStatusCommand(
+            id: $this->existingBeneficiary->id()->value,
+            isActive: false,
+        );
 
-        $this->deleteBeneficiaryHandler->handle($deleteBeneficiaryCommand);
+        $this->updateBeneficiaryStatusHandler->handle($updateBeneficiaryStatusCommand);
 
         $this->assertFalse($this->existingBeneficiary->isActive());
+    }
+
+    #[Test]
+    public function test_handle_activates_beneficiary(): void
+    {
+        $this->existingBeneficiary->markAsDeleted();
+        $this->existingBeneficiary->pullDomainEvents();
+
+        $this->beneficiaryRepository
+            ->expects($this->once())
+            ->method('findById')
+            ->willReturn($this->existingBeneficiary);
+
+        $this->beneficiaryRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->existingBeneficiary);
+
+        $updateBeneficiaryStatusCommand = new UpdateBeneficiaryStatusCommand(
+            id: $this->existingBeneficiary->id()->value,
+            isActive: true,
+        );
+
+        $this->updateBeneficiaryStatusHandler->handle($updateBeneficiaryStatusCommand);
+
+        $this->assertTrue($this->existingBeneficiary->isActive());
     }
 
     #[Test]
@@ -75,14 +106,17 @@ class DeleteBeneficiaryHandlerTest extends TestCase
             ->method('findById')
             ->willReturn(null);
 
-        $deleteBeneficiaryCommand = new DeleteBeneficiaryCommand(id: (string) DomainId::generate());
+        $updateBeneficiaryStatusCommand = new UpdateBeneficiaryStatusCommand(
+            id: DomainId::generate()->value,
+            isActive: false,
+        );
 
         $this->expectException(EntityNotFoundException::class);
-        $this->deleteBeneficiaryHandler->handle($deleteBeneficiaryCommand);
+        $this->updateBeneficiaryStatusHandler->handle($updateBeneficiaryStatusCommand);
     }
 
     #[Test]
-    public function test_handle_emits_beneficiary_deleted_event(): void
+    public function test_handle_saves_beneficiary_after_status_change(): void
     {
         $this->beneficiaryRepository
             ->expects($this->once())
@@ -94,16 +128,12 @@ class DeleteBeneficiaryHandlerTest extends TestCase
             ->method('save')
             ->with($this->existingBeneficiary);
 
-        $this->existingBeneficiary->pullDomainEvents();
+        $updateBeneficiaryStatusCommand = new UpdateBeneficiaryStatusCommand(
+            id: $this->existingBeneficiary->id()->value,
+            isActive: false,
+        );
 
-        $this->eventDispatcher
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(BeneficiaryDeleted::class));
-
-        $deleteBeneficiaryCommand = new DeleteBeneficiaryCommand(id: $this->existingBeneficiary->id()->value);
-
-        $this->deleteBeneficiaryHandler->handle($deleteBeneficiaryCommand);
+        $this->updateBeneficiaryStatusHandler->handle($updateBeneficiaryStatusCommand);
     }
 
     private function createExistingBeneficiary(): Beneficiary

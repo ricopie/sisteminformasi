@@ -16,6 +16,7 @@
         "spatie/laravel-ciphersweet": "^1.8"
     },
     "require-dev": {
+        "deptrac/deptrac": "^4.7",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^3.0",
         "laravel/pail": "^1.2.2",
@@ -62,16 +63,17 @@
             "vendor/bin/pint --config=src/pint-psr12.json"
         ],
         "analyse": "vendor/bin/phpstan analyse",
+        "deptrac": "vendor/bin/deptrac analyse",
         "refactor": "vendor/bin/rector process --dry-run",
-        "refactor:fix": "vendor/bin/rector process",
         "check": [
             "@format",
+            "@deptrac",
             "@refactor",
             "@analyse",
             "@test"
         ],
         "fix": [
-            "@refactor:fix",
+            "vendor/bin/rector process",
             "@format"
         ],
         "post-autoload-dump": [

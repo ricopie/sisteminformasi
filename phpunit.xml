@@ -14,9 +14,15 @@
     </testsuites>
     <source>
         <include>
-            <directory>app</directory>
-            <directory>src</directory>
+            <directory suffix=".php">src/Contexts/*/Application</directory>
+            <directory suffix=".php">src/Contexts/*/Domain</directory>
+            <directory suffix=".php">src/Shared/*/Application</directory>
+            <directory suffix=".php">src/Shared/*/Domain</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">src/Shared/*/Infrastructure</directory>
+            <directory suffix=".php">src/Contexts/*/Infrastructure</directory>
+        </exclude>
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
