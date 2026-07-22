@@ -58,7 +58,7 @@ class ListBeneficiariesHandlerTest extends TestCase
                 return new PaginatedResult(items: [], total: 0, perPage: 15, currentPage: 1, lastPage: 1);
             });
 
-        $listBeneficiariesQuery = new ListBeneficiariesQuery();
+        $listBeneficiariesQuery = new ListBeneficiariesQuery;
         $this->listBeneficiariesHandler->handle($listBeneficiariesQuery);
 
         $this->assertSame([], $capturedArgs[0]);

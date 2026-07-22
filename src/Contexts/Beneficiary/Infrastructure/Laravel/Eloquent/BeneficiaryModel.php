@@ -182,7 +182,7 @@ class BeneficiaryModel extends Model implements CipherSweetEncrypted
             $beneficiary->guardians(),
         );
 
-        $model = new self();
+        $model = new self;
         $model->id = $beneficiary->id()->value;
         $model->nik = $beneficiary->nik()->value;
         $model->nik_blind_index = ''; // Will be computed by CipherSweet

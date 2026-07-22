@@ -18,12 +18,12 @@ class BeneficiaryServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             BeneficiaryRepositoryInterface::class,
-            fn (): EloquentBeneficiaryRepository => new EloquentBeneficiaryRepository(new BeneficiaryModel())
+            fn (): EloquentBeneficiaryRepository => new EloquentBeneficiaryRepository(new BeneficiaryModel)
         );
 
         $this->app->bind(
             BeneficiaryQueryInterface::class,
-            fn (): EloquentBeneficiaryQuery => new EloquentBeneficiaryQuery(new BeneficiaryModel())
+            fn (): EloquentBeneficiaryQuery => new EloquentBeneficiaryQuery(new BeneficiaryModel)
         );
     }
 

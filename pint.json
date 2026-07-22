@@ -1,8 +1,9 @@
 {
     "preset": "laravel",
-    "paths": [
-        "src/Shared/Infrastructure",
-        "src/Contexts/*/Infrastructure/Laravel",
-        "app"
+    "exclude": [
+        "src/Contexts/Beneficiary/Domain",
+        "src/Contexts/Beneficiary/Application",
+        "src/Shared/Domain",
+        "src/Shared/Application"
     ]
 }

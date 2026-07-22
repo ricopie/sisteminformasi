@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "ricopie/sisteminformasi",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": [
@@ -108,7 +108,6 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }
     },

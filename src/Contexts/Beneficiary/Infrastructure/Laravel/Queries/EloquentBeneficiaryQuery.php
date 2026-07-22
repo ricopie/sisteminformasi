@@ -20,8 +20,7 @@ class EloquentBeneficiaryQuery implements BeneficiaryQueryInterface
 {
     public function __construct(
         private readonly BeneficiaryModel $beneficiaryModel,
-    ) {
-    }
+    ) {}
 
     /** Find a beneficiary by its unique identifier. */
     public function findById(DomainId $domainId): ?Beneficiary
