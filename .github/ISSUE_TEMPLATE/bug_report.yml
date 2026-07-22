@@ -1,0 +1,66 @@
+name: Bug Report
+description: Laporkan bug atau masalah yang ditemukan
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Terima kasih telah melaporkan bug! Silakan isi informasi di bawah ini.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Deskripsi Bug
+      description: Jelaskan bug yang kamu temukan
+      placeholder: Deskripsikan apa yang terjadi...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah-langkah Reproduksi
+      description: Bagaimana cara mereproduksi bug ini?
+      placeholder: |
+        1. Buka halaman '...'
+        2. Klik tombol '...'
+        3. Scroll ke bawah sampai '...'
+        4. Lihat error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Yang Diharapkan
+      description: Apa yang seharusnya terjadi?
+      placeholder: Seharusnya...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Kalau ada, lampirkan screenshot
+      placeholder: Drag and drop screenshot di sini...
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Di environment apa bug ini muncul?
+      options:
+        - Local Development (Docker Toolbox)
+        - Staging
+        - Production
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informasi Tambahan
+      description: Info lain yang relevan
+      placeholder: Log error, browser version, dll.
